@@ -1,6 +1,8 @@
 #include "ObjectHandler.h"
 #include "RobotBody.h"
 #include "CameraMovement.h"
+#include "imageloader.h"
+
 #include <stdio.h>
 #include <iostream>
 
