@@ -11,7 +11,7 @@
 #define GL_HEADER
 #include <GL/glut.h>
 #endif
-// #include "ObjectHandler.h"
+#include "ObjectHandler.h"
 
 class RobotBody
 {
@@ -21,7 +21,7 @@ private:
         hip_right_x = 0, knee_right = 0, knee_left = 0, hip_left_x = 0, full_body_angle = 0,
         hip_right_z = 0, hip_left_z, shoulder_right_x = 0, shoulder_left_x = 0, shoulder_right_y = 0, shoulder_left_y = 0;
     double position[3] = {0, 0, 0};
-    // ObjectHandler *object;
+    ObjectHandler *object;
     void draw_head_trunk(void);
     void draw_arm(float shoulder_t1, float shoulder_t2, float elbow_t1, float elbow_t2,
                   float finger_t1, float finger_t2, float finger_t3, float finger_t4,

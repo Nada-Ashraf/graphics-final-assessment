@@ -16,7 +16,7 @@ RobotBody::RobotBody(double x, double y, double z, char *objectName, float objec
     this->position[0] = x;
     this->position[1] = y;
     this->position[2] = z;
-    // this->object = new ObjectHandler(objectName, object_x, object_y, object_z, angle_y, angle_x, scale);
+    this->object = new ObjectHandler(objectName, object_x, object_y, object_z, angle_y, angle_x, scale);
 }
 
 RobotBody::~RobotBody()
