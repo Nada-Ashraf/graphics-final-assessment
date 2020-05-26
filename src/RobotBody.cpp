@@ -23,7 +23,7 @@ RobotBody::~RobotBody()
 {
 }
 
-void draw_head_trunk(void)
+void RobotBody::draw_head_trunk(void)
 {
     glPushMatrix();
     glTranslatef(0, 4, 0);
@@ -34,9 +34,9 @@ void draw_head_trunk(void)
     glutWireCube(2.5);
 }
 
-void draw_arm(float shoulder_t1, float shoulder_t2, float elbow_t1, float elbow_t2,
-              float finger_t1, float finger_t2, float finger_t3, float finger_t4,
-              float shoulder_angle_z, float shoulder_angle_x, float shoulder_angle_y, float elbow_angle, float fingerBase, float fingerUp)
+void RobotBody::draw_arm(float shoulder_t1, float shoulder_t2, float elbow_t1, float elbow_t2,
+                         float finger_t1, float finger_t2, float finger_t3, float finger_t4,
+                         float shoulder_angle_z, float shoulder_angle_x, float shoulder_angle_y, float elbow_angle, float fingerBase, float fingerUp)
 {
     // Draw shoulder
     glPushMatrix();
@@ -156,7 +156,7 @@ void draw_arm(float shoulder_t1, float shoulder_t2, float elbow_t1, float elbow_
     glPopMatrix();
 }
 
-void draw_leg(float t, float hip_angle_x, float hip_angle_z, float knee_angle)
+void RobotBody::draw_leg(float t, float hip_angle_x, float hip_angle_z, float knee_angle)
 {
     glPushMatrix();
     glTranslatef(t, -1, 0);
