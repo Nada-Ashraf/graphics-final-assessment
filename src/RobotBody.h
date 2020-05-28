@@ -17,12 +17,12 @@ class RobotBody
 private:
     // TODO change in private block and variable names
     double position[3] = {0, 0, 0};
-    int shoulder = 0, shoulder2 = -90, elbow = 0, handBase = 0,
-        handUp = 0, rightHipY = 0, rightHipX = 0, rknee = 0, lknee = 0, leftHipY = 0, leftHipX = 0;
+    int shoulderX = 0, shoulderZ = -90, elbow = 0, handBase = 0,
+        handUp = 0, rightHipY = 0, rightHipX = 0, leftHipY = 0, leftHipX = 0, leftKnee = 0, rightKnee = 0;
     ObjectHandler *obj;
     /******************************** RobotBody Parts ********************************/
     void drawArm(int, bool);
-    void drawLeg(int, int, float, int);
+    void drawLeg(int, int, float, int, int);
     void drawHeadTrunk();
     /****************************** End RobotBody Parts ******************************/
 

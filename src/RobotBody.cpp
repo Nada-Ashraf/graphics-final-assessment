@@ -24,15 +24,13 @@ void RobotBody::displayRobotBody()
     glScalef(0.125, 0.125, 0.125);
     this->drawHeadTrunk();
     // right arm
-    this->drawArm(shoulder, true);
+    this->drawArm(shoulderX, true);
     // left arm
-    this->drawArm(-shoulder, false);
+    this->drawArm(-shoulderX, false);
     // left leg
-    this->drawLeg(leftHipX, leftHipY, -0.5, 1);
+    this->drawLeg(leftHipX, leftHipY, -0.5, 1, leftKnee);
     // right leg
-    this->drawLeg(rightHipX, rightHipY, 0.5, -1);
-    // this->drawLeftLeg();
-    // this->drawRightLeg();
+    this->drawLeg(rightHipX, rightHipY, 0.5, -1, rightKnee);
     glPopMatrix();
 }
 
@@ -49,7 +47,7 @@ void RobotBody::drawArm(int angle, bool isRight)
     }
     glTranslatef(1.0, 2.0, 0.0);
     glRotatef((GLfloat)angle, 1, 0, 0);
-    glRotatef((GLfloat)shoulder2, 0.0, 0.0, 1.0);
+    glRotatef((GLfloat)shoulderZ, 0.0, 0.0, 1.0);
     glTranslatef(1.0, 0.0, 0.0);
     glPushMatrix();
     glScalef(2.0, 0.6, 1.0);
@@ -69,7 +67,7 @@ void RobotBody::drawArm(int angle, bool isRight)
         obj->drawModel();
     }
 
-    //Draw hand flang 1
+    // Finger 1
     glTranslatef(1.0, -0.25, 0.0);
     glRotatef((GLfloat)handBase, 0.0, 0.0, 1.0);
     glTranslatef(0.15, 0.0, 0.0);
@@ -78,7 +76,6 @@ void RobotBody::drawArm(int angle, bool isRight)
     glutWireCube(1);
     glPopMatrix();
 
-    //Draw hand flang 1
     glTranslatef(0.15, 0.0, 0.0);
     glRotatef((GLfloat)handUp, 0.0, 0.0, 1.0);
     glTranslatef(0.15, 0.0, 0.0);
@@ -90,7 +87,7 @@ void RobotBody::drawArm(int angle, bool isRight)
     glPopMatrix();
     glPushMatrix();
 
-    //Draw hand flang 2
+    // Finger 2
     glTranslatef(1.0, 0.25, 0.2);
     glRotatef((GLfloat)-1 * handBase, 0.0, 0.0, 1.0);
     glTranslatef(0.15, 0.0, 0.0);
@@ -99,7 +96,6 @@ void RobotBody::drawArm(int angle, bool isRight)
     glutWireCube(1);
     glPopMatrix();
 
-    //Draw hand flang 2
     glTranslatef(0.15, 0.0, 0.0);
     glRotatef((GLfloat)-1 * handUp, 0.0, 0.0, 1.0);
     glTranslatef(0.15, 0.0, 0.0);
@@ -111,7 +107,7 @@ void RobotBody::drawArm(int angle, bool isRight)
     glPopMatrix();
     glPushMatrix();
 
-    //Draw hand flang 3
+    // Finger 3
     glTranslatef(1.0, 0.25, -0.2);
     glRotatef((GLfloat)-1 * handBase, 0.0, 0.0, 1.0);
     glTranslatef(0.15, 0.0, 0.0);
@@ -120,7 +116,6 @@ void RobotBody::drawArm(int angle, bool isRight)
     glutWireCube(1);
     glPopMatrix();
 
-    //Draw hand flang 3
     glTranslatef(0.15, 0.0, 0.0);
     glRotatef((GLfloat)-1 * handUp, 0.0, 0.0, 1.0);
     glTranslatef(0.15, 0.0, 0.0);
@@ -132,7 +127,7 @@ void RobotBody::drawArm(int angle, bool isRight)
     glPopMatrix();
     glPushMatrix();
 
-    //Draw hand flang 4
+    // Finger 4
     glTranslatef(1.0, 0.25, -0.4);
     glRotatef((GLfloat)-1 * handBase, 0.0, 0.0, 1.0);
     glTranslatef(0.15, 0.0, 0.0);
@@ -141,7 +136,6 @@ void RobotBody::drawArm(int angle, bool isRight)
     glutWireCube(1);
     glPopMatrix();
 
-    //Draw hand flang 4
     glTranslatef(0.15, 0.0, 0.0);
     glRotatef((GLfloat)-1 * handUp, 0.0, 0.0, 1.0);
     glTranslatef(0.15, 0.0, 0.0);
@@ -152,7 +146,7 @@ void RobotBody::drawArm(int angle, bool isRight)
 
     glPopMatrix();
 
-    //Draw hand flang 5
+    // Finger 5
     glTranslatef(1.0, 0.25, 0.4);
     glRotatef((GLfloat)-1 * handBase, 0.0, 0.0, 1.0);
     glTranslatef(0.15, 0.0, 0.0);
@@ -161,7 +155,6 @@ void RobotBody::drawArm(int angle, bool isRight)
     glutWireCube(1);
     glPopMatrix();
 
-    //Draw hand flang 5
     glTranslatef(0.15, 0.0, 0.0);
     glRotatef((GLfloat)-1 * handUp, 0.0, 0.0, 1.0);
     glTranslatef(0.15, 0.0, 0.0);
@@ -173,7 +166,7 @@ void RobotBody::drawArm(int angle, bool isRight)
     glPopMatrix();
 }
 
-void RobotBody::drawLeg(int hipAngleX, int hipAngleY, float translateX, int rotationAxis)
+void RobotBody::drawLeg(int hipAngleX, int hipAngleY, float translateX, int rotationAxis, int kneeAngle)
 {
     glPushMatrix();
     glTranslatef(translateX, -4, 0);
@@ -188,7 +181,7 @@ void RobotBody::drawLeg(int hipAngleX, int hipAngleY, float translateX, int rota
     glPopMatrix();
 
     glTranslatef(0, -2, 0);
-    glRotatef(lknee, -1, 0, 0);
+    glRotatef(leftKnee, -1, 0, 0);
     glTranslatef(0, -1, 0);
     glScalef(1, 2, 1);
     glutWireCube(1);
@@ -198,16 +191,11 @@ void RobotBody::drawLeg(int hipAngleX, int hipAngleY, float translateX, int rota
 
 void RobotBody::drawHeadTrunk(void)
 {
-    // draw trunk
-    // glMatrixMode(GL_MODELVIEW);
-    // glLoadIdentity();
-
     glPushMatrix();
     glScalef(2.0, 4.0, 1.0);
     glutWireCube(1.0);
     glPopMatrix();
 
-    // draw head
     glPushMatrix();
     glTranslatef(0.0, 4.0, 0);
     glutWireSphere(1, 8, 8);
