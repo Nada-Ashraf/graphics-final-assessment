@@ -15,9 +15,9 @@ void ObjectHandler::drawModel(void)
     glPopMatrix();
 }
 
-ObjectHandler::ObjectHandler(char *objectName, float x, float y, float z, float angle_y, float angle_x, float scale)
+ObjectHandler::ObjectHandler(std::string objectPath, float x, float y, float z, float angle_y, float angle_x, float scale)
 {
-    pmodel = glmReadOBJ(objectName);
+    pmodel = glmReadOBJ((char *)objectPath.c_str());
     this->x = x;
     this->y = y;
     this->z = z;

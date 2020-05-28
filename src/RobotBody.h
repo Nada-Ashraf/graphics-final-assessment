@@ -1,4 +1,3 @@
-
 #ifndef BODY_INCLUDED
 #define BODY_INCLUDED
 
@@ -16,26 +15,33 @@
 class RobotBody
 {
 private:
-    int shoulder_right_z = 0, shoulder_left_z = 0, elbow_right = 0, elbow_left = 0,
-        fingerBase_right = 0, fingerUp_right = 0, fingerBase_left = 0, fingerUp_left = 0,
-        hip_right_x = 0, knee_right = 0, knee_left = 0, hip_left_x = 0, full_body_angle = 0,
-        hip_right_z = 0, hip_left_z, shoulder_right_x = 0, shoulder_left_x = 0, shoulder_right_y = 0, shoulder_left_y = 0;
+    // TODO change in private block and variable names
     double position[3] = {0, 0, 0};
-    ObjectHandler *object;
-    void draw_head_trunk(void);
-    void draw_arm(float shoulder_t1, float shoulder_t2, float elbow_t1, float elbow_t2,
-                  float finger_t1, float finger_t2, float finger_t3, float finger_t4,
-                  float shoulder_angle_z, float shoulder_angle_x, float shoulder_angle_y, float elbow_angle, float fingerBase, float fingerUp);
-    void draw_leg(float t, float hip_angle_x, float hip_angle_z, float knee_angle);
+    int shoulder = 0, shoulder2 = -90, elbow = 0, handBase = 0,
+        handUp = 0, rightHipY = 0, rightHipX = 0, rknee = 0, lknee = 0, leftHipY = 0, leftHipX = 0;
+    ObjectHandler *obj;
+    /******************************** RobotBody Parts ********************************/
+    void drawArm(int, bool);
+    void drawLeg(int, int, float, int);
+    void drawHeadTrunk();
+    /****************************** End RobotBody Parts ******************************/
 
 public:
-    RobotBody();
+    /***************************** Constructors *********************************/
     RobotBody(double x, double y, double z);
-    RobotBody(double x, double y, double z, char *objectName, float object_x, float object_y, float object_z, float angle_y, float angle_x, float scale);
-    ~RobotBody();
-    void display_body();
-
-    // keyboard events
+    RobotBody(double x,
+              double y,
+              double z,
+              std::string objectPath,
+              float object_x,
+              float object_y,
+              float object_z,
+              float angle_y,
+              float angle_x,
+              float scale);
+    /**************************** End Constructors ******************************/
+    // Display
+    void displayRobotBody();
 };
 
 #endif
