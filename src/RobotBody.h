@@ -17,13 +17,10 @@ class RobotBody
 private:
     // TODO change in private block and variable names
     double position[3] = {0, 0, 0};
-    int shoulderX = 0, shoulderZ = -90, elbow = 0, handBase = 0,
-        handUp = 0, rightHipY = 0, rightHipX = 0, leftHipY = 0, leftHipX = 0, leftKnee = 0, rightKnee = 0;
-
     ObjectHandler *obj;
     /******************************** RobotBody Parts ********************************/
-    void drawArm(int, bool);
-    void drawLeg(int, int, float, int, int);
+    void drawArm(int, float, bool);
+    void drawLowerBody(float, int);
     void drawHeadTrunk();
     /****************************** End RobotBody Parts ******************************/
 
@@ -56,7 +53,6 @@ public:
     /**************************** End Constructors ******************************/
     // Display
     void displayRobotBody();
-    void stand();
 
     /******************************** Body Parts Movements ********************************/
     // Shoulder
@@ -85,7 +81,7 @@ public:
     void right_knee_up();
     void right_knee_down();
 
-    void movement(void);
+    void stand();
     /****************************** End Body Parts Movements ******************************/
 };
 

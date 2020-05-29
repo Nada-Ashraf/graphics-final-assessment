@@ -53,14 +53,14 @@ Surface fourthWall = Surface({2, -0.25, -2, -2, -0.25, -2, -2, 2, -2, 2, 2, -2})
 /*********************************** End Surfaces ************************************/
 
 /************************************* Bodies *************************************/
-RobotBody body2 = RobotBody(-1, 0.75, -1);
-RobotBody body = RobotBody(1, 0.75, -1, gunPath, 0.6, 0, -2.5, 0, 0, 3);
+// RobotBody body2 = RobotBody(-1, 0.75, -1);
+RobotBody body = RobotBody(0.2, 0.75, -1, gunPath, 0.6, 0, -2.5, 0, 0, 3);
 // Body body2 = Body(-1, 0.75, -1);
 /*********************************** End Bodies ***********************************/
 
 /************************************* Objects *************************************/
 ObjectHandler object1 = ObjectHandler(drumPath, -1, 0.45, 0.2, 180, 0, 0.7);
-ObjectHandler manObject = ObjectHandler(manPath, 1, 0.45, 0.1, 0, 0, 0.7);
+ObjectHandler manObject = ObjectHandler(manPath, 0.2, 0.45, 1.0, 0, 0, 0.7);
 /*********************************** End Objects ***********************************/
 
 /******************************* Functions Declerations ****************************/
@@ -206,7 +206,7 @@ void display()
     glMaterialfv(GL_FRONT, GL_SPECULAR, materialSpec);
     glMaterialfv(GL_FRONT, GL_SHININESS, materialShin);
     glPushMatrix();
-    body2.displayRobotBody();
+    // body2.displayRobotBody();
 
     floorSurface.display_surface();
     firstWall.display_surface();
@@ -233,17 +233,17 @@ void display()
 // TODO change this function
 void kill_man(int x)
 {
-    x %= 80;
-    if (x < 20)
-        body2.shoulder_up_killer();
-    else if (x < 40)
-        body2.shoulder_down_killer();
-    else if (x < 60)
-        manAngle += 5;
-    else
-        manAngle -= 5;
-    glutPostRedisplay();
-    glutTimerFunc(50, kill_man, ++x);
+    // x %= 80;
+    // if (x < 20)
+    //     body2.shoulder_up_killer();
+    // else if (x < 40)
+    //     body2.shoulder_down_killer();
+    // else if (x < 60)
+    //     manAngle += 5;
+    // else
+    //     manAngle -= 5;
+    // glutPostRedisplay();
+    // glutTimerFunc(50, kill_man, ++x);
 }
 
 void intialization()
@@ -268,7 +268,7 @@ void intialization()
     fourthWall.change_texture(grayTexturePath.c_str());
 
     // glEnable(GL_LIGHTING);
-    // glDisable(GL_LIGHTING);
+    glDisable(GL_LIGHTING);
 
     glEnable(GL_LIGHT1);
 
