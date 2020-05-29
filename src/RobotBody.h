@@ -19,6 +19,21 @@ private:
     double position[3] = {0, 0, 0};
     int shoulderX = 0, shoulderZ = -90, elbow = 0, handBase = 0,
         handUp = 0, rightHipY = 0, rightHipX = 0, leftHipY = 0, leftHipX = 0, leftKnee = 0, rightKnee = 0;
+
+    int curw;
+    int curh;
+    int swingLeft = 0;
+    int swingRight = 0;
+    bool isSwingForward = false;
+    bool isLighting = false;
+    int curTurn = 180; // current facing angle
+    int maxAngel = 0;  // Maximum swing angle
+    int stepDis = 0;   // Thigh swing speed
+    float speed = 0;   // forward speed
+    bool isStand = true;
+    float curDistanceX = 0, curDistanceZ = 0; // current distance
+    float legDis = 0;
+
     ObjectHandler *obj;
     /******************************** RobotBody Parts ********************************/
     void drawArm(int, bool);
@@ -49,9 +64,21 @@ public:
     void shoulder_up_celebration();
     void shoulder_down_killer();
     void shoulder_down_celebration();
+
     // Elbow
     void elbow_up();
     void elbow_down();
+
+    // Hip
+    void right_hip_up();
+    void right_hip_up2();
+    void right_hip_down();
+    void right_hip_down2();
+    void left_hip_up();
+    void left_hip_up2();
+    void left_hip_down();
+    void left_hip_down2();
+
     // Knee
     void left_knee_up();
     void left_knee_down();

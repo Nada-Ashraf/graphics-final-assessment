@@ -7,6 +7,7 @@
 #include <iostream>
 
 float jmp = 0, vRot = 0, manAngle = 0; // TODO Change this
+GLfloat specref[] = {1.0f, 1.0f, 0.3f, 0.1f};
 
 /************************************* Window *************************************/
 const int WINDOW_WIDTH = 1024;
@@ -93,6 +94,8 @@ void timer(int x)
         body.right_knee_down();
         // body.shoulder_up_celebration();
         // body.elbow_up();
+        // body.left_hip_down();
+        body.right_hip_down();
     }
     else
     {
@@ -101,6 +104,8 @@ void timer(int x)
         body.right_knee_up();
         // body.shoulder_down_celebration();
         // body.elbow_down();
+        // body.left_hip_up();
+        body.right_hip_up();
     }
     glutPostRedisplay();
     glutTimerFunc(100, timer, ++x);
@@ -173,6 +178,13 @@ void intialization()
     glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     glutCreateWindow("GAME");
 
+    //color
+    glEnable(GL_COLOR_MATERIAL);
+    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, specref);
+    glMateriali(GL_FRONT, GL_SHININESS, 8);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
     // Set Textures
     floorSurface.change_texture(metalTexturePath.c_str());
     firstWall.change_texture(grayTexturePath.c_str());
@@ -180,10 +192,13 @@ void intialization()
     thirdWall.change_texture(grayTexturePath.c_str());
     fourthWall.change_texture(grayTexturePath.c_str());
 
-    glEnable(GL_LIGHTING);
+    // glEnable(GL_LIGHTING);
+    glDisable(GL_LIGHTING);
+
     glEnable(GL_LIGHT1);
 
     // Light Properties
+
     glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiff);
     glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpec);

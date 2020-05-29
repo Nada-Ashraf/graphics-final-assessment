@@ -17,21 +17,184 @@ RobotBody::RobotBody(double x, double y, double z, std::string objectName, float
 
 void RobotBody::displayRobotBody()
 {
+    // glPushMatrix();
+    // glTranslatef(this->position[0],
+    //              this->position[1],
+    //              this->position[2]);
+    // glScalef(0.125, 0.125, 0.125);
+    // this->drawHeadTrunk();
+    // // right arm
+    // this->drawArm(shoulderX, true);
+    // // left arm
+    // this->drawArm(-shoulderX, false);
+    // // left leg
+    // this->drawLeg(leftHipX, leftHipY, -0.5, 1, leftKnee);
+    // // right leg
+    // this->drawLeg(rightHipX, rightHipY, 0.5, -1, rightKnee);
+    // glPopMatrix();
+
+    // Into the stack, draw the lower right body
     glPushMatrix();
+
     glTranslatef(this->position[0],
                  this->position[1],
                  this->position[2]);
-    glScalef(0.125, 0.125, 0.125);
-    this->drawHeadTrunk();
-    // right arm
-    this->drawArm(shoulderX, true);
-    // left arm
-    this->drawArm(-shoulderX, false);
-    // left leg
-    this->drawLeg(leftHipX, leftHipY, -0.5, 1, leftKnee);
-    // right leg
-    this->drawLeg(rightHipX, rightHipY, 0.5, -1, rightKnee);
+    glScalef(0.5, 0.5, 0.5);
+    glPushMatrix();
+
+    // Translation and rotation of the coordinate system
+    glTranslatef(curDistanceX, 0.0, curDistanceZ); // go ahead
+    glRotatef((GLfloat)curTurn, 0.0, 1.0, 0.0);    // turn to
+
+    // Adjust the coordinate system to the right to locate the center of rotation
+    glTranslatef(0.375, 0.0, 0.0);
+    // Whether to lift the right thigh
+    glRotatef((GLfloat)swingRight, 1.0, 0.0, 0.0);
+    //Decrease the coordinate system and prepare to draw the right thigh
+    glTranslatef(0.0, -0.5, 0.0);
+    glColor3f(0.5, 0.8, 0.3);
+    //Draw the right thigh
+    glPushMatrix();
+    glScalef(0.4, 1.0, 0.4);
+    glutSolidCube(1.0);
     glPopMatrix();
+
+    // Decrease the coordinate system and locate the center of rotation
+    glTranslatef(0.0, -0.5, 0.0);
+    // Whether to raise the right calf
+    glRotatef((GLfloat)legDis, 1.0, 0.0, 0.0);
+    // Decrease the coordinate system and prepare to draw the right calf
+    glTranslatef(0.0, -0.5, 0.0);
+    glColor3f(0.1, 0.5, 0.5);
+    // Draw the right calf
+    glPushMatrix();
+    glScalef(0.3, 1.0, 0.3);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    // Decrease the coordinate system and prepare to draw the right foot
+    glTranslatef(0.0, -0.5, -0.1);
+    glColor3f(0.8, 0.8, 0.2);
+    // Draw the right foot
+    glPushMatrix();
+    glScalef(0.5, 0.1, 0.7);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPopMatrix();
+    // Unstack
+
+    // Push into the stack, draw the lower left body
+    glPushMatrix();
+    // Translate and rotate the coordinate system
+    glTranslatef(curDistanceX, 0.0, curDistanceZ); // forward
+    glRotatef((GLfloat)curTurn, 0.0, 1.0, 0.0);    // Turn
+
+    // The same applies to the left thigh
+    glTranslatef(-0.375, 0.0, 0.0);
+    glRotatef((GLfloat)swingLeft, 1.0, 0.0, 0.0);
+    glTranslatef(0.0, -0.5, 0.0);
+    glColor3f(0.5, 0.8, 0.3);
+    glPushMatrix();
+    glScalef(0.4, 1.0, 0.4);
+    glutSolidCube(1.0);
+    glPopMatrix();
+    // The same applies to the left calf
+    glTranslatef(0.0, -0.5, 0.0);
+    glRotatef((GLfloat)legDis, 1.0, 0.0, 0.0);
+    glTranslatef(0.0, -0.5, 0.0);
+    glColor3f(0.1, 0.5, 0.5);
+    glPushMatrix();
+    glScalef(0.3, 1.0, 0.3);
+    glutSolidCube(1.0);
+    glPopMatrix();
+    // Similarly deal with the left foot
+    glTranslatef(0.0, -0.5, -0.1);
+    glColor3f(0.8, 0.8, 0.2);
+    glPushMatrix();
+    glScalef(0.5, 0.1, 0.7);
+    glutSolidCube(1.0);
+    glPopMatrix();
+    glPopMatrix();
+    // Unstack
+
+    // Push into the stack, draw the chest and head
+    glPushMatrix();
+    glTranslatef(curDistanceX, 0.0, curDistanceZ);
+    glRotatef((GLfloat)curTurn, 0.0, 1.0, 0.0);
+    //chest
+    glTranslatef(0.0, 1.0, 0.0);
+    glColor3f(1.0, 0.7, 0.1);
+    glPushMatrix();
+    glScalef(1.4, 2.0, 0.5);
+    glutSolidCube(1.0);
+    glPopMatrix();
+    //head
+    glTranslatef(0.0, 1.25, 0.0);
+    glColor3f(0.9, 0.9, 0.9);
+    glPushMatrix();
+    glScalef(0.5, 0.5, 0.5);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    //eye
+    glTranslatef(0.125, 0.1, -0.25);
+    glColor3f(0.2, 0.2, 0.2);
+    glPushMatrix();
+    glScalef(0.1, 0.1, 0.1);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glTranslatef(-0.25, 0.0, 0.0);
+    glColor3f(0.2, 0.2, 0.2);
+    glPushMatrix();
+    glScalef(0.1, 0.1, 0.1);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    //mouth
+    glTranslatef(0.125, -0.25, 0.0);
+    glColor3f(0.8, 0.2, 0.2);
+    glPushMatrix();
+    glScalef(0.3, 0.1, 0.1);
+    glutSolidCube(1.0);
+    glPopMatrix();
+
+    glPopMatrix();
+    // Unstack
+
+    // Push the stack and draw the right arm
+    glPushMatrix();
+    glTranslatef(curDistanceX, 0.0, curDistanceZ);
+    glRotatef((GLfloat)curTurn, 0.0, 1.0, 0.0);
+    // right arm
+    glTranslatef(0.85, 1.75, 0.0);
+    glRotatef((GLfloat)swingLeft, 1.0, 0.0, 0.0);
+    glTranslatef(0.0, -0.5, 0.0);
+    glColor3f(0.8, 0.4, 0.5);
+    glPushMatrix();
+    glScalef(0.3, 1.6, 0.4);
+    glutSolidCube(1.0);
+    glPopMatrix();
+    glPopMatrix();
+    // Unstack
+
+    // Push into the stack and draw the left arm
+    glPushMatrix();
+    glTranslatef(curDistanceX, 0.0, curDistanceZ);
+    glRotatef((GLfloat)curTurn, 0.0, 1.0, 0.0);
+    // Left arm
+    glTranslatef(-0.85, 1.75, 0.0);
+    glRotatef((GLfloat)swingRight, 1.0, 0.0, 0.0);
+    glTranslatef(0.0, -0.5, 0.0);
+    glColor3f(0.8, 0.4, 0.5);
+    glPushMatrix();
+    glScalef(0.3, 1.6, 0.4);
+    glutSolidCube(1.0);
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    // Unstack
 }
 
 void RobotBody::drawArm(int angle, bool isRight)
@@ -191,6 +354,10 @@ void RobotBody::drawLeg(int hipAngleX, int hipAngleY, float translateX, int rota
 
 void RobotBody::drawHeadTrunk(void)
 {
+    // glDisable(GL_TEXTURE_2D);
+    glColor3f(0.2, 0.7, 0.1);
+    glPushMatrix();
+
     glPushMatrix();
     glScalef(2.0, 4.0, 1.0);
     glutWireCube(1.0);
@@ -199,6 +366,8 @@ void RobotBody::drawHeadTrunk(void)
     glPushMatrix();
     glTranslatef(0.0, 4.0, 0);
     glutWireSphere(1, 8, 8);
+    glPopMatrix();
+
     glPopMatrix();
 }
 
@@ -243,6 +412,21 @@ void RobotBody::elbow_down()
     glutPostRedisplay();
 }
 
+void RobotBody::left_knee_down()
+{
+    leftKnee = (leftKnee + 5) % 360;
+    if (leftKnee > 90)
+        leftKnee = 90;
+    glutPostRedisplay();
+}
+void RobotBody::left_knee_up()
+{
+    leftKnee = (leftKnee - 5) % 360;
+    if (leftKnee < 0)
+        leftKnee = 0;
+    glutPostRedisplay();
+}
+
 void RobotBody::right_knee_down()
 {
     rightKnee = (rightKnee + 5) % 360;
@@ -258,17 +442,73 @@ void RobotBody::right_knee_up()
     glutPostRedisplay();
 }
 
-void RobotBody::left_knee_down()
+void RobotBody::right_hip_up()
 {
-    leftKnee = (leftKnee + 5) % 360;
-    if (leftKnee > 90)
-        leftKnee = 90;
+    if (rightHipX < 100)
+        rightHipX = (rightHipX + 5) % 180;
     glutPostRedisplay();
 }
-void RobotBody::left_knee_up()
+
+void RobotBody::right_hip_down()
 {
-    leftKnee = (leftKnee - 5) % 360;
-    if (leftKnee < 0)
-        leftKnee = 0;
+    if (rightHipX > -100)
+        rightHipX = (rightHipX - 5) % 180;
     glutPostRedisplay();
 }
+
+// void RobotBody::right_hip_down()
+// {
+//     rightHipY = (rightHipY + 5) % 360;
+//     if (rightHipY > 45)
+//         rightHipY = 45;
+//     glutPostRedisplay();
+// }
+// void RobotBody::right_hip_up()
+// {
+//     rightHipY = (rightHipY - 5) % 360;
+//     if (rightHipY < 0)
+//         rightHipY = 0;
+//     glutPostRedisplay();
+// }
+// void RobotBody::right_hip_down2()
+// {
+//     rightHipX = (rightHipX + 5) % 360;
+//     if (rightHipX > 90)
+//         rightHipX = 90;
+//     glutPostRedisplay();
+// }
+// void RobotBody::right_hip_up2()
+// {
+//     rightHipX = (rightHipX - 5) % 360;
+//     if (rightHipX < 0)
+//         rightHipX = 0;
+//     glutPostRedisplay();
+// }
+// void RobotBody::left_hip_down()
+// {
+//     leftHipY = (leftHipY + 5) % 360;
+//     if (leftHipY > 45)
+//         leftHipY = 45;
+//     glutPostRedisplay();
+// }
+// void RobotBody::left_hip_up()
+// {
+//     leftHipY = (leftHipY - 5) % 360;
+//     if (leftHipY < 0)
+//         leftHipY = 0;
+//     glutPostRedisplay();
+// }
+// void RobotBody::left_hip_down2()
+// {
+//     leftHipX = (leftHipX + 5) % 360;
+//     if (leftHipX > 90)
+//         leftHipX = 90;
+//     glutPostRedisplay();
+// }
+// void RobotBody::left_hip_up2()
+// {
+//     leftHipX = (leftHipX - 5) % 360;
+//     if (leftHipX < 0)
+//         leftHipX = 0;
+//     glutPostRedisplay();
+// }
