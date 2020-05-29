@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <iostream>
 
-float jmp = 0, vRot = 0, manAngle = 0; // TODO Change this
+float manAngle = 0; // TODO Change this
 GLfloat specref[] = {1.0f, 1.0f, 0.3f, 0.1f};
 
 /************************************* Window *************************************/
@@ -19,7 +19,7 @@ const float WINDOW_RATIO = ((float)WINDOW_WIDTH) / WINDOW_HEIGHT;
 /* Objects */
 std::string drumPath = "./Objects/drum.obj";
 std::string manPath = "./Objects/al.obj";
-std::string gunPath = "./Objects/Sniper_Rifle.obj";
+std::string gunPath = "./Objects/sword.obj";
 /* Textures */
 std::string grayTexturePath = "./Textures/gray.bmp";
 std::string patternTexturePath = "./Textures/pattern.bmp";
@@ -53,9 +53,7 @@ Surface fourthWall = Surface({2, -0.25, -2, -2, -0.25, -2, -2, 2, -2, 2, 2, -2})
 /*********************************** End Surfaces ************************************/
 
 /************************************* Bodies *************************************/
-// RobotBody body2 = RobotBody(-1, 0.75, -1);
-RobotBody body = RobotBody(0.2, 0.75, -1, gunPath, 0.6, 0, -2.5, 0, 0, 3);
-// Body body2 = Body(-1, 0.75, -1);
+RobotBody body = RobotBody(0.2, 0.8, -1, gunPath, 0.6, 0, -2.5, 0, 0, 3);
 /*********************************** End Bodies ***********************************/
 
 /************************************* Objects *************************************/
@@ -64,7 +62,7 @@ ObjectHandler manObject = ObjectHandler(manPath, 0.2, 0.45, 1.0, 0, 0, 0.7);
 /*********************************** End Objects ***********************************/
 
 /******************************* Functions Declerations ****************************/
-void timer(int value);
+void timer(int x);
 void display();
 void kill_man(int x);
 void intialization();
@@ -81,8 +79,34 @@ int main(int argc, char **argv)
     return 0;
 }
 
+// void timer(int x)
+// {
+//     x %= 80;
+//     if (x < 20)
+//     // body.walking();
+//     {
+//         body.stand();
+//         body.maxAngel = 20;
+//         body.stepDis = 1;
+//         body.speed = 0.02;
+//         //Avoid calling timer twice
+//         if (body.isStand)
+//             glutTimerFunc(20, timer, 20);
+//         body.isStand = false;
+//     }
+//     else if (x < 40)
+//         body.stand();
+//     else if (x < 60)
+//         manAngle += 5;
+//     else
+//         manAngle -= 5;
+//     glutPostRedisplay();
+//     glutTimerFunc(50, timer, ++x);
+// }
+
 void timer(int value)
 {
+    // value %= 80;
     int tempTurn = body.curTurn;
     body.curDistanceX = body.curDistanceX - body.speed * sin((GLfloat)tempTurn / 360 * 3.14 * 2);
     body.curDistanceZ = body.curDistanceZ - body.speed * cos((GLfloat)tempTurn / 360 * 3.14 * 2);
@@ -120,11 +144,11 @@ void timer(int value)
     {
         body.isSwingForward = false;
     }
-    body.displayRobotBody();
     glutPostRedisplay();
     if (!body.isStand)
         glutTimerFunc(value, timer, value);
 }
+
 void MenuFunc(int data)
 {
     switch (data)
@@ -159,39 +183,17 @@ void MenuFunc(int data)
 /******************************* Functions Definations ****************************/
 
 // TODO change this function
-// void timer(int x)
-// {
-//     x %= 40;
-//     if (x <= 19)
-//     {
-//         jmp += 0.05;
-//         body.left_knee_down();
-//         body.right_knee_down();
-//         // body.shoulder_up_celebration();
-//         // body.elbow_up();
-//         // body.left_hip_down();
-//         body.right_hip_down();
-//     }
-//     else
-//     {
-//         jmp -= 0.05;
-//         body.left_knee_up();
-//         body.right_knee_up();
-//         // body.shoulder_down_celebration();
-//         // body.elbow_down();
-//         // body.left_hip_up();
-//         body.right_hip_up();
-//     }
-//     glutPostRedisplay();
-//     glutTimerFunc(100, timer, ++x);
-// }
-
-// TODO change this function
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glShadeModel(GL_FLAT);
+    //color
+    glEnable(GL_COLOR_MATERIAL);
+    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, specref);
+    glMateriali(GL_FRONT, GL_SHININESS, 8);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -206,7 +208,6 @@ void display()
     glMaterialfv(GL_FRONT, GL_SPECULAR, materialSpec);
     glMaterialfv(GL_FRONT, GL_SHININESS, materialShin);
     glPushMatrix();
-    // body2.displayRobotBody();
 
     floorSurface.display_surface();
     firstWall.display_surface();
@@ -215,7 +216,6 @@ void display()
     fourthWall.display_surface();
 
     glPushMatrix();
-    glTranslatef(0, jmp, 0);
     body.displayRobotBody();
     glPopMatrix();
 
@@ -223,7 +223,8 @@ void display()
 
     glPushMatrix();
     glRotatef(manAngle, 1, 0, 0);
-    manObject.drawModel();
+    if (body.isStand)
+        manObject.drawModel();
     glPopMatrix();
 
     glPopMatrix();
@@ -235,15 +236,27 @@ void kill_man(int x)
 {
     // x %= 80;
     // if (x < 20)
-    //     body2.shoulder_up_killer();
+    //     body.shoulder_up();
     // else if (x < 40)
-    //     body2.shoulder_down_killer();
+    //     body.shoulder_down();
     // else if (x < 60)
     //     manAngle += 5;
     // else
     //     manAngle -= 5;
     // glutPostRedisplay();
     // glutTimerFunc(50, kill_man, ++x);
+
+    x %= 40;
+    if (x <= 19)
+    {
+        body.celebration();
+    }
+    else
+    {
+        body.celebration2();
+    }
+    glutPostRedisplay();
+    glutTimerFunc(100, kill_man, ++x);
 }
 
 void intialization()
@@ -253,13 +266,6 @@ void intialization()
     glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     glutCreateWindow("GAME");
 
-    //color
-    glEnable(GL_COLOR_MATERIAL);
-    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, specref);
-    glMateriali(GL_FRONT, GL_SHININESS, 8);
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
     // Set Textures
     floorSurface.change_texture(metalTexturePath.c_str());
     firstWall.change_texture(grayTexturePath.c_str());
@@ -267,8 +273,7 @@ void intialization()
     thirdWall.change_texture(grayTexturePath.c_str());
     fourthWall.change_texture(grayTexturePath.c_str());
 
-    // glEnable(GL_LIGHTING);
-    glDisable(GL_LIGHTING);
+    glEnable(GL_LIGHTING);
 
     glEnable(GL_LIGHT1);
 
@@ -295,8 +300,16 @@ void intialization()
     glMatrixMode(GL_PROJECTION);
     gluPerspective(90.0, WINDOW_RATIO, 0.1, 60.0);
     glutDisplayFunc(display);
-    glutTimerFunc(0, timer, 0);
+    // glutTimerFunc(0, timer, 0);
     glutTimerFunc(0, kill_man, 0);
+    // glutTimerFunc(0, timer_, 0);
+
+    // //color
+    // glEnable(GL_COLOR_MATERIAL);
+    // glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+    // glMaterialfv(GL_FRONT, GL_SPECULAR, specref);
+    // glMateriali(GL_FRONT, GL_SHININESS, 8);
+    // glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     // Keyboard
     glutKeyboardFunc(keyboard_control);

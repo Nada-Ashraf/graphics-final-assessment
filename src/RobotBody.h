@@ -20,13 +20,15 @@ private:
     ObjectHandler *obj;
     /******************************** RobotBody Parts ********************************/
     void drawArm(int, float, bool);
-    void drawLowerBody(float, int);
+    void drawLowerBody(float, int, int);
     void drawHeadTrunk();
+    int shoulder_attack = 0;
+    int shoulder_celebration = -90;
+    int lknee = 0;
+    int rknee = 0;
     /****************************** End RobotBody Parts ******************************/
 
 public:
-    int curw;
-    int curh;
     int swingLeft = 0;
     int swingRight = 0;
     bool isSwingForward = false;
@@ -53,36 +55,13 @@ public:
     /**************************** End Constructors ******************************/
     // Display
     void displayRobotBody();
-
-    /******************************** Body Parts Movements ********************************/
-    // Shoulder
-    void shoulder_up_killer();
-    void shoulder_up_celebration();
-    void shoulder_down_killer();
-    void shoulder_down_celebration();
-
-    // Elbow
-    void elbow_up();
-    void elbow_down();
-
-    // Hip
-    void right_hip_up();
-    void right_hip_up2();
-    void right_hip_down();
-    void right_hip_down2();
-    void left_hip_up();
-    void left_hip_up2();
-    void left_hip_down();
-    void left_hip_down2();
-
-    // Knee
-    void left_knee_up();
-    void left_knee_down();
-    void right_knee_up();
-    void right_knee_down();
-
+    // helper function
     void stand();
-    /****************************** End Body Parts Movements ******************************/
+    void walking();
+    void shoulder_up();
+    void shoulder_down();
+    void celebration();
+    void celebration2();
 };
 
 #endif
