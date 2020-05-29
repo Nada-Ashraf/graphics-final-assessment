@@ -42,6 +42,22 @@ public:
     /**************************** End Constructors ******************************/
     // Display
     void displayRobotBody();
+
+    /******************************** Body Parts Movements ********************************/
+    // Shoulder
+    void shoulder_up_killer();
+    void shoulder_up_celebration();
+    void shoulder_down_killer();
+    void shoulder_down_celebration();
+    // Elbow
+    void elbow_up();
+    void elbow_down();
+    // Knee
+    void left_knee_up();
+    void left_knee_down();
+    void right_knee_up();
+    void right_knee_down();
+    /****************************** End Body Parts Movements ******************************/
 };
 
 #endif

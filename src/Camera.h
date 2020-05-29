@@ -4,7 +4,7 @@
 class Camera
 {
 private:
-    std::vector<double> eye = {0, 0, 0};
+    std::vector<double> eye = {0, 0, 2};
     std::vector<double> center = {0, 0, -1};
     std::vector<double> up = {0, 1, 0};
     double speed = 3.1415 / 100;

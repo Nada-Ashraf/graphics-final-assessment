@@ -201,3 +201,74 @@ void RobotBody::drawHeadTrunk(void)
     glutWireSphere(1, 8, 8);
     glPopMatrix();
 }
+
+void RobotBody::shoulder_up_killer()
+{
+    shoulderX = (shoulderX + 5) % 360;
+    if (shoulderX > 70)
+        shoulderX = 70;
+}
+void RobotBody::shoulder_down_killer()
+{
+    shoulderX = (shoulderX - 5) % 360;
+    if (shoulderX < -90)
+        shoulderX = -90;
+}
+void RobotBody::shoulder_up_celebration()
+{
+    shoulderZ = (shoulderZ + 5) % 360;
+    if (shoulderZ > 70)
+        shoulderZ = 70;
+    glutPostRedisplay();
+}
+void RobotBody::shoulder_down_celebration()
+{
+    shoulderZ = (shoulderZ - 5) % 360;
+    if (shoulderZ < -90)
+        shoulderZ = -90;
+    glutPostRedisplay();
+}
+void RobotBody::elbow_up()
+{
+    elbow = (elbow + 5) % 360;
+    if (elbow > 130)
+        elbow = 130;
+    glutPostRedisplay();
+}
+void RobotBody::elbow_down()
+{
+    elbow = (elbow - 5) % 360;
+    if (elbow < 0)
+        elbow = 0;
+    glutPostRedisplay();
+}
+
+void RobotBody::right_knee_down()
+{
+    rightKnee = (rightKnee + 5) % 360;
+    if (rightKnee > 90)
+        rightKnee = 90;
+    glutPostRedisplay();
+}
+void RobotBody::right_knee_up()
+{
+    rightKnee = (rightKnee - 5) % 360;
+    if (rightKnee < 0)
+        rightKnee = 0;
+    glutPostRedisplay();
+}
+
+void RobotBody::left_knee_down()
+{
+    leftKnee = (leftKnee + 5) % 360;
+    if (leftKnee > 90)
+        leftKnee = 90;
+    glutPostRedisplay();
+}
+void RobotBody::left_knee_up()
+{
+    leftKnee = (leftKnee - 5) % 360;
+    if (leftKnee < 0)
+        leftKnee = 0;
+    glutPostRedisplay();
+}

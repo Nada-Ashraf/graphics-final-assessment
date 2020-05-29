@@ -1,4 +1,4 @@
-#include "camera.h"
+#include "Camera.h"
 
 #ifndef MATH_HEADER
 #define MATH_HEADER

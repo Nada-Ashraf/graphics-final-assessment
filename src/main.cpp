@@ -1,103 +1,113 @@
+#include "imageloader.h"
 #include "ObjectHandler.h"
 #include "RobotBody.h"
-#include "CameraMovement.h"
-#include "imageloader.h"
-#include "FloorAndWalls.h"
+#include "Camera.h"
+#include "Surface.h"
 #include <stdio.h>
 #include <iostream>
-#ifndef GL_HEADER
-#define GL_HEADER
-#include <GL/glut.h>
-#endif
 
+float jmp = 0, vRot = 0, manAngle = 0; // TODO Change this
+
+/************************************* Window *************************************/
 const int WINDOW_WIDTH = 1024;
-const int WINDOW_HEIGHT = 768;
-const float ASPECT = float(WINDOW_WIDTH) / float(WINDOW_HEIGHT);
+const int WINDOW_HEIGHT = 720;
+const float WINDOW_RATIO = ((float)WINDOW_WIDTH) / WINDOW_HEIGHT;
+/*********************************** End Window ***********************************/
 
-CameraMovement camera;
-// ObjectHandler laptop{"./objects/Laptop.obj", 1, 0.75, -1, 0, 0, 2};
+/************************************* Paths *************************************/
+/* Objects */
+std::string drumPath = "./Objects/drum.obj";
+std::string manPath = "./Objects/al.obj";
+std::string gunPath = "./Objects/Sniper_Rifle.obj";
+/* Textures */
+std::string grayTexturePath = "./Textures/gray.bmp";
+std::string patternTexturePath = "./Textures/pattern.bmp";
+std::string metalTexturePath = "./Textures/metal.bmp";
+std::string grassTexturePath = "./Textures/grass.bmp";
+/************************************ End Paths ***********************************/
 
-float floorVertices[12] = {-2, -0.25, 2, 2, -0.25, 2, 2, -0.25, -2, -2, -0.25, -2};
+/************************************ Properties **********************************/
+/* Material Properties */
+GLfloat materialShin[] = {100.0},
+        materialSpec[] = {0.0, 0.0, 0.0, 1.0},
+        materialDiff[] = {0.643, 0.753, 0.934, 1.0};
+/* Light Properties */
+GLfloat lightPosition[] = {0.5, 5.0, 0.0, 1.0},
+        lightPos[] = {0, -5.0, 0, 1.0},
+        lightSpec[] = {1.0, 1.0, 1.0, 1.0},
+        lightAmb[] = {0.0, 0.0, 0.0, 0.0},
+        lightDiff[] = {0.5, 0.5, 0.5, 1.0};
+/********************************** End Properties *********************************/
 
-FloorAndWalls floorSurface{floorVertices};
+Camera cam;
+/************************************* Surfaces *************************************/
+// floor
+Surface floorSurface = Surface({-2, -0.25, 2, 2, -0.25, 2, 2, -0.25, -2, -2, -0.25, -2});
+// walls
+Surface firstWall = Surface({-2, -0.25, 2, -2, -0.25, -2, -2, 2, -2, -2, 2, 2});
+Surface secondWall = Surface({2, -0.25, 2, 2, -0.25, -2, 2, 2, -2, 2, 2, 2});
+Surface thirdWall = Surface({2, -0.25, -2, -2, -0.25, -2, -2, 2, -2, 2, 2, -2});
+Surface fourthWall = Surface({2, -0.25, -2, -2, -0.25, -2, -2, 2, -2, 2, 2, -2});
 
-float wallVertices[12] = {-2, -0.25, 2, -2, -0.25, -2, -2, 2, -2, -2, 2, 2};
+/*********************************** End Surfaces ************************************/
 
-FloorAndWalls wallSurface{wallVertices};
+/************************************* Bodies *************************************/
+RobotBody body = RobotBody(-1, 0.75, -1);
+RobotBody body2 = RobotBody(1, 0.75, -1, gunPath, 0.6, 0, -2.5, 0, 0, 3);
+// Body body2 = Body(-1, 0.75, -1);
+/*********************************** End Bodies ***********************************/
 
-float wall2Vertices[12] = {2, -0.25, 2, 2, -0.25, -2, 2, 2, -2, 2, 2, 2};
+/************************************* Objects *************************************/
+ObjectHandler object1 = ObjectHandler(drumPath, -1, 0.45, 0.2, 180, 0, 0.7);
+ObjectHandler manObject = ObjectHandler(manPath, 1, 0.45, 0.1, 0, 0, 0.7);
+/*********************************** End Objects ***********************************/
 
-FloorAndWalls wall2Surface{wall2Vertices};
+/******************************* Functions Declerations ****************************/
+void timer(int x);
+void display();
+void kill_man(int x);
+void intialization();
+void choose_floor_menu(int key);
+void change_floor_to(std::string newFloorPath);
+void keyboard_control(unsigned char key, int x, int y);
+/**************************** End Functions Declerations ***************************/
 
-float wall3Vertices[12] = {2, -0.25, -2, -2, -0.25, -2, -2, 2, -2, 2, 2, -2};
-
-FloorAndWalls wall3Surface{wall3Vertices};
-
-GLfloat light_ambient[] = {0.0, 0.0, 0.0, 0.0};
-GLfloat light_diffuse[] = {0.5, 0.5, 0.5, 1.0};
-GLfloat light_specular[] = {1.0, 1.0, 1.0, 1.0};
-GLfloat light_position[] = {0.5, 5.0, 0.0, 1.0};
-
-GLfloat lightPos1[] = {0, -5.0, 0, 1.0};
-// Material Properties
-GLfloat mat_amb_diff[] = {0.643, 0.753, 0.934, 1.0};
-GLfloat mat_specular[] = {0.0, 0.0, 0.0, 1.0};
-GLfloat shininess[] = {100.0};
-
-RobotBody Body{0, 0, -1};
-// RobotBody RobotBody2{-1, 0.75, -1, "./Objects/sword.obj", 0.6, 0, -2.5, 0, 0, 5};
-
-void keyboard(unsigned char key, int x, int y)
+int main(int argc, char **argv)
 {
-    switch (key)
-    {
-    case 'r':
-        camera.cameraRight();
-        glutPostRedisplay();
-        break;
-    case 'f':
-        camera.cameraForward();
-        glutPostRedisplay();
-        break;
-    case '-':
-        camera.cameraBackward();
-        glutPostRedisplay();
-        break;
-    case 'l':
-        camera.cameraLeft();
-        glutPostRedisplay();
-        break;
-
-    default:
-        break;
-    }
-}
-void screen_menu(int key)
-{
-    switch (key)
-    {
-    case 'm':
-        floorSurface.changeTexture("./textures/roof_0105_01.bmp");
-        glutPostRedisplay();
-        break;
-    case 'c':
-        floorSurface.changeTexture("./textures/floor.bmp");
-        glutPostRedisplay();
-        break;
-    case 'w':
-        floorSurface.changeTexture("./textures/index1.bmp");
-        glutPostRedisplay();
-        break;
-    case 'g':
-        floorSurface.changeTexture("./textures/images2.bmp");
-        glutPostRedisplay();
-        break;
-    }
+    glutInit(&argc, argv);
+    intialization();
+    glutMainLoop();
+    return 0;
 }
 
-/* Handler for window-repaint event. Called back when the window first appears and
-   whenever the window needs to be re-painted. */
-void display(void)
+/******************************* Functions Definations ****************************/
+
+// TODO change this function
+void timer(int x)
+{
+    x %= 40;
+    if (x <= 19)
+    {
+        jmp += 0.05;
+        body.left_knee_down();
+        body.right_knee_down();
+        // body.shoulder_up_celebration();
+        // body.elbow_up();
+    }
+    else
+    {
+        jmp -= 0.05;
+        body.left_knee_up();
+        body.right_knee_up();
+        // body.shoulder_down_celebration();
+        // body.elbow_down();
+    }
+    glutPostRedisplay();
+    glutTimerFunc(100, timer, ++x);
+}
+
+// TODO change this function
+void display()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -105,90 +115,204 @@ void display(void)
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    camera.initializeCamera();
+    cam.initialize();
     glPushMatrix();
-    glLightfv(GL_LIGHT1, GL_POSITION, lightPos1);
-    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-    glPopMatrix();
-    //materials properties
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-    glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
-    glPushMatrix();
-    // RobotBody2.display_body();
-    floorSurface.displayFloorAndWalls();
-    wallSurface.displayFloorAndWalls();
-    wall2Surface.displayFloorAndWalls();
-    wall3Surface.displayFloorAndWalls();
-
-    glPushMatrix();
-    Body.displayRobotBody();
+    glLightfv(GL_LIGHT1, GL_POSITION, lightPos);
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
     glPopMatrix();
 
-    // laptop.drawModel();
+    // Materials properties
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, materialDiff);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, materialSpec);
+    glMaterialfv(GL_FRONT, GL_SHININESS, materialShin);
+    glPushMatrix();
+    body2.displayRobotBody();
+
+    floorSurface.display_surface();
+    firstWall.display_surface();
+    secondWall.display_surface();
+    thirdWall.display_surface();
+    fourthWall.display_surface();
+
+    glPushMatrix();
+    glTranslatef(0, jmp, 0);
+    body.displayRobotBody();
+    glPopMatrix();
+
+    // object1.drawModel();
+
+    glPushMatrix();
+    glRotatef(manAngle, 1, 0, 0);
+    manObject.drawModel();
+    glPopMatrix();
 
     glPopMatrix();
     glutSwapBuffers();
 }
 
-void initRendering()
+// TODO change this function
+void kill_man(int x)
 {
-
-    floorSurface.changeTexture("./textures/index1.bmp");
-    wallSurface.changeTexture("./textures/gray.bmp");
-    wall2Surface.changeTexture("./textures/gray.bmp");
-    wall3Surface.changeTexture("./textures/gray.bmp");
-    // Turn on the power
-    glEnable(GL_LIGHTING);
-    // Flip light switch
-    // glEnable(GL_LIGHT0);
-    glEnable(GL_LIGHT1);
-    // assign light parameters
-    glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-    glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient);
-    glLightfv(GL_LIGHT1, GL_DIFFUSE, light_diffuse);
-    glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
-    // Material Properties
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, mat_amb_diff);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-    glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
-    GLfloat lightColor1[] = {1.0f, 1.0f, 1.0f, 1.0f};
-    glLightfv(GL_LIGHT1, GL_DIFFUSE, lightColor1);
-    glLightfv(GL_LIGHT1, GL_POSITION, lightPos1);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor1);
-    glEnable(GL_NORMALIZE);
-    //Enable smooth shading
-    glShadeModel(GL_SMOOTH);
-    // Enable Depth buffer
-    glEnable(GL_DEPTH_TEST);
+    x %= 80;
+    if (x < 20)
+        body2.shoulder_up_killer();
+    else if (x < 40)
+        body2.shoulder_down_killer();
+    else if (x < 60)
+        manAngle += 5;
+    else
+        manAngle -= 5;
+    glutPostRedisplay();
+    glutTimerFunc(50, kill_man, ++x);
 }
 
-int main(int argc, char **argv)
+void intialization()
 {
-    glutInit(&argc, argv);
+    // window intialization
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-    glutCreateWindow("ROOM");
-    initRendering();
+    glutCreateWindow("GAME");
 
+    // Set Textures
+    floorSurface.change_texture(metalTexturePath.c_str());
+    firstWall.change_texture(grayTexturePath.c_str());
+    secondWall.change_texture(grayTexturePath.c_str());
+    thirdWall.change_texture(grayTexturePath.c_str());
+    fourthWall.change_texture(grayTexturePath.c_str());
+
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT1);
+
+    // Light Properties
+    glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiff);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpec);
+    glLightfv(GL_LIGHT1, GL_AMBIENT, lightAmb);
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, lightDiff);
+    glLightfv(GL_LIGHT1, GL_SPECULAR, lightSpec);
+
+    // Material Properties
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, materialDiff);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, materialSpec);
+    glMaterialfv(GL_FRONT, GL_SHININESS, materialShin);
+    GLfloat lightColor1[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, lightColor1);
+    glLightfv(GL_LIGHT1, GL_POSITION, lightPos);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor1);
+    glEnable(GL_NORMALIZE);
+    glShadeModel(GL_SMOOTH);
+    glEnable(GL_DEPTH_TEST);
     glMatrixMode(GL_PROJECTION);
-    gluPerspective(90.0, ASPECT, 0.1, 60.0);
-
-    glutKeyboardFunc(keyboard);
-
-    glutCreateMenu(screen_menu);
-    glutAddMenuEntry("Textures", 0);
-    glutAddMenuEntry("", 0);
-    glutAddMenuEntry("Metal", 'm');
-    glutAddMenuEntry("Chess", 'c');
-    glutAddMenuEntry("stone", 'g');
-    glutAddMenuEntry("EndGame", 'w');
-    glutAttachMenu(GLUT_RIGHT_BUTTON);
-
+    gluPerspective(90.0, WINDOW_RATIO, 0.1, 60.0);
     glutDisplayFunc(display);
+    glutTimerFunc(0, timer, 0);
+    glutTimerFunc(0, kill_man, 0);
 
-    glutMainLoop();
-    return 0;
+    // Keyboard
+    glutKeyboardFunc(keyboard_control);
+
+    // Menu
+    glutCreateMenu(choose_floor_menu);
+    glutAddMenuEntry("Choose Floor", 0);
+    glutAddMenuEntry("------------", 0);
+    glutAddMenuEntry("Pattern", 'c');
+    glutAddMenuEntry("Grass", 'g');
+    glutAddMenuEntry("Gray", 'r');
+    glutAddMenuEntry("Metal", 'm');
+    glutAddMenuEntry("------------", 0);
+    glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
+
+void choose_floor_menu(int key)
+{
+    switch (key)
+    {
+    case 'm':
+        change_floor_to(metalTexturePath);
+        break;
+    case 'g':
+        change_floor_to(grassTexturePath);
+        break;
+    case 'r':
+        change_floor_to(grayTexturePath);
+        break;
+    case 'c':
+        change_floor_to(patternTexturePath);
+        break;
+    default:
+        break;
+    }
+}
+
+void change_floor_to(std::string newFloorPath)
+{
+    floorSurface.change_texture(newFloorPath.c_str());
+    glutPostRedisplay();
+}
+
+void keyboard_control(unsigned char key, int x, int y)
+{
+    // TODO fix or remove turn_up and turn_down
+    switch (key)
+    {
+    case 'W':
+        cam.forward();
+        glutPostRedisplay();
+        break;
+    case 'w':
+        cam.forward();
+        glutPostRedisplay();
+        break;
+    case 'S':
+        cam.backward();
+        glutPostRedisplay();
+        break;
+    case 's':
+        cam.backward();
+        glutPostRedisplay();
+        break;
+    case 'D':
+        cam.turn_right();
+        glutPostRedisplay();
+        break;
+    case 'd':
+        cam.turn_right();
+        glutPostRedisplay();
+        break;
+    case 'A':
+        cam.turn_left();
+        glutPostRedisplay();
+        break;
+    case 'a':
+        cam.turn_left();
+        glutPostRedisplay();
+        break;
+    case 'P':
+        cam.turn_left();
+        glutPostRedisplay();
+        break;
+    case 'p':
+        cam.turn_left();
+        glutPostRedisplay();
+        break;
+    case 'Q':
+        cam.turn_up();
+        glutPostRedisplay();
+        break;
+    case 'q':
+        cam.turn_up();
+        glutPostRedisplay();
+        break;
+    case 'E':
+        cam.turn_down();
+        glutPostRedisplay();
+        break;
+    case 'e':
+        cam.turn_down();
+        glutPostRedisplay();
+        break;
+    default:
+        break;
+    }
+}
+/**************************** End Functions Definations ***************************/
