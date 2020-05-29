@@ -20,6 +20,14 @@ private:
     int shoulderX = 0, shoulderZ = -90, elbow = 0, handBase = 0,
         handUp = 0, rightHipY = 0, rightHipX = 0, leftHipY = 0, leftHipX = 0, leftKnee = 0, rightKnee = 0;
 
+    ObjectHandler *obj;
+    /******************************** RobotBody Parts ********************************/
+    void drawArm(int, bool);
+    void drawLeg(int, int, float, int, int);
+    void drawHeadTrunk();
+    /****************************** End RobotBody Parts ******************************/
+
+public:
     int curw;
     int curh;
     int swingLeft = 0;
@@ -33,15 +41,6 @@ private:
     bool isStand = true;
     float curDistanceX = 0, curDistanceZ = 0; // current distance
     float legDis = 0;
-
-    ObjectHandler *obj;
-    /******************************** RobotBody Parts ********************************/
-    void drawArm(int, bool);
-    void drawLeg(int, int, float, int, int);
-    void drawHeadTrunk();
-    /****************************** End RobotBody Parts ******************************/
-
-public:
     /***************************** Constructors *********************************/
     RobotBody(double x, double y, double z);
     RobotBody(double x,
@@ -57,6 +56,7 @@ public:
     /**************************** End Constructors ******************************/
     // Display
     void displayRobotBody();
+    void stand();
 
     /******************************** Body Parts Movements ********************************/
     // Shoulder
@@ -84,6 +84,8 @@ public:
     void left_knee_down();
     void right_knee_up();
     void right_knee_down();
+
+    void movement(void);
     /****************************** End Body Parts Movements ******************************/
 };
 

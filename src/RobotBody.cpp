@@ -191,6 +191,7 @@ void RobotBody::displayRobotBody()
     glPushMatrix();
     glScalef(0.3, 1.6, 0.4);
     glutSolidCube(1.0);
+
     glPopMatrix();
     glPopMatrix();
     glPopMatrix();
@@ -512,3 +513,56 @@ void RobotBody::right_hip_down()
 //         leftHipX = 0;
 //     glutPostRedisplay();
 // }
+
+void RobotBody::movement(void)
+{
+    int tempTurn = curTurn;
+    curDistanceX = curDistanceX - speed * sin((GLfloat)tempTurn / 360 * 3.14 * 2);
+    curDistanceZ = curDistanceZ - speed * cos((GLfloat)tempTurn / 360 * 3.14 * 2);
+    if (!isSwingForward)
+    {
+        swingLeft = (swingLeft + stepDis);
+        swingRight = (swingRight - stepDis);
+        if (swingLeft > 0)
+        {
+            legDis = legDis - stepDis * 1.2;
+        }
+        else
+        {
+            legDis = legDis + stepDis * 1.2;
+        }
+    }
+    else
+    {
+        swingLeft = (swingLeft - stepDis);
+        swingRight = (swingRight + stepDis);
+        if (swingLeft < 0)
+        {
+            legDis = legDis - stepDis * 1.2;
+        }
+        else
+        {
+            legDis = legDis + stepDis * 1.2;
+        }
+    }
+    if (swingLeft > maxAngel)
+    {
+        isSwingForward = true;
+    }
+    if (swingLeft < maxAngel * -1)
+    {
+        isSwingForward = false;
+    }
+    this->displayRobotBody();
+    glutPostRedisplay();
+    // if (!isStand)
+    //     glutTimerFunc(value, this->movement, value);
+}
+
+void RobotBody::stand()
+{
+    swingLeft = 0;
+    swingRight = 0;
+    isSwingForward = false;
+    legDis = 0;
+}

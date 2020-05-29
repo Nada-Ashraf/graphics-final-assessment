@@ -53,8 +53,8 @@ Surface fourthWall = Surface({2, -0.25, -2, -2, -0.25, -2, -2, 2, -2, 2, 2, -2})
 /*********************************** End Surfaces ************************************/
 
 /************************************* Bodies *************************************/
-RobotBody body = RobotBody(-1, 0.75, -1);
-RobotBody body2 = RobotBody(1, 0.75, -1, gunPath, 0.6, 0, -2.5, 0, 0, 3);
+RobotBody body2 = RobotBody(-1, 0.75, -1);
+RobotBody body = RobotBody(1, 0.75, -1, gunPath, 0.6, 0, -2.5, 0, 0, 3);
 // Body body2 = Body(-1, 0.75, -1);
 /*********************************** End Bodies ***********************************/
 
@@ -64,7 +64,7 @@ ObjectHandler manObject = ObjectHandler(manPath, 1, 0.45, 0.1, 0, 0, 0.7);
 /*********************************** End Objects ***********************************/
 
 /******************************* Functions Declerations ****************************/
-void timer(int x);
+void timer(int value);
 void display();
 void kill_man(int x);
 void intialization();
@@ -81,35 +81,110 @@ int main(int argc, char **argv)
     return 0;
 }
 
-/******************************* Functions Definations ****************************/
-
-// TODO change this function
-void timer(int x)
+void timer(int value)
 {
-    x %= 40;
-    if (x <= 19)
+    int tempTurn = body.curTurn;
+    body.curDistanceX = body.curDistanceX - body.speed * sin((GLfloat)tempTurn / 360 * 3.14 * 2);
+    body.curDistanceZ = body.curDistanceZ - body.speed * cos((GLfloat)tempTurn / 360 * 3.14 * 2);
+    if (!body.isSwingForward)
     {
-        jmp += 0.05;
-        body.left_knee_down();
-        body.right_knee_down();
-        // body.shoulder_up_celebration();
-        // body.elbow_up();
-        // body.left_hip_down();
-        body.right_hip_down();
+        body.swingLeft = (body.swingLeft + body.stepDis);
+        body.swingRight = (body.swingRight - body.stepDis);
+        if (body.swingLeft > 0)
+        {
+            body.legDis = body.legDis - body.stepDis * 1.2;
+        }
+        else
+        {
+            body.legDis = body.legDis + body.stepDis * 1.2;
+        }
     }
     else
     {
-        jmp -= 0.05;
-        body.left_knee_up();
-        body.right_knee_up();
-        // body.shoulder_down_celebration();
-        // body.elbow_down();
-        // body.left_hip_up();
-        body.right_hip_up();
+        body.swingLeft = (body.swingLeft - body.stepDis);
+        body.swingRight = (body.swingRight + body.stepDis);
+        if (body.swingLeft < 0)
+        {
+            body.legDis = body.legDis - body.stepDis * 1.2;
+        }
+        else
+        {
+            body.legDis = body.legDis + body.stepDis * 1.2;
+        }
     }
+    if (body.swingLeft > body.maxAngel)
+    {
+        body.isSwingForward = true;
+    }
+    if (body.swingLeft < body.maxAngel * -1)
+    {
+        body.isSwingForward = false;
+    }
+    body.displayRobotBody();
     glutPostRedisplay();
-    glutTimerFunc(100, timer, ++x);
+    if (!body.isStand)
+        glutTimerFunc(value, timer, value);
 }
+void MenuFunc(int data)
+{
+    switch (data)
+    {
+    case 1:
+        body.isStand = true;
+        body.stand();
+        break;
+    case 2:
+        body.stand();
+        body.maxAngel = 20;
+        body.stepDis = 1;
+        body.speed = 0.02;
+        //Avoid calling timer twice
+        if (body.isStand)
+            glutTimerFunc(20, timer, 20);
+        body.isStand = false;
+        break;
+    case 3:
+        body.stand();
+        body.maxAngel = 55;
+        body.stepDis = 5;
+        body.speed = 0.04;
+        //Avoid calling timer twice
+        if (body.isStand)
+            glutTimerFunc(10, timer, 10);
+        body.isStand = false;
+        break;
+    }
+}
+
+/******************************* Functions Definations ****************************/
+
+// TODO change this function
+// void timer(int x)
+// {
+//     x %= 40;
+//     if (x <= 19)
+//     {
+//         jmp += 0.05;
+//         body.left_knee_down();
+//         body.right_knee_down();
+//         // body.shoulder_up_celebration();
+//         // body.elbow_up();
+//         // body.left_hip_down();
+//         body.right_hip_down();
+//     }
+//     else
+//     {
+//         jmp -= 0.05;
+//         body.left_knee_up();
+//         body.right_knee_up();
+//         // body.shoulder_down_celebration();
+//         // body.elbow_down();
+//         // body.left_hip_up();
+//         body.right_hip_up();
+//     }
+//     glutPostRedisplay();
+//     glutTimerFunc(100, timer, ++x);
+// }
 
 // TODO change this function
 void display()
@@ -193,7 +268,7 @@ void intialization()
     fourthWall.change_texture(grayTexturePath.c_str());
 
     // glEnable(GL_LIGHTING);
-    glDisable(GL_LIGHTING);
+    // glDisable(GL_LIGHTING);
 
     glEnable(GL_LIGHT1);
 
@@ -227,14 +302,21 @@ void intialization()
     glutKeyboardFunc(keyboard_control);
 
     // Menu
-    glutCreateMenu(choose_floor_menu);
-    glutAddMenuEntry("Choose Floor", 0);
-    glutAddMenuEntry("------------", 0);
-    glutAddMenuEntry("Pattern", 'c');
-    glutAddMenuEntry("Grass", 'g');
-    glutAddMenuEntry("Gray", 'r');
-    glutAddMenuEntry("Metal", 'm');
-    glutAddMenuEntry("------------", 0);
+    // glutCreateMenu(choose_floor_menu);
+    // glutAddMenuEntry("Choose Floor", 0);
+    // glutAddMenuEntry("------------", 0);
+    // glutAddMenuEntry("Pattern", 'c');
+    // glutAddMenuEntry("Grass", 'g');
+    // glutAddMenuEntry("Gray", 'r');
+    // glutAddMenuEntry("Metal", 'm');
+    // glutAddMenuEntry("------------", 0);
+    // glutAttachMenu(GLUT_RIGHT_BUTTON);
+
+    glutCreateMenu(MenuFunc);
+    glutAddMenuEntry("Stand", 1);
+    glutAddMenuEntry("Walk around", 2);
+    glutAddMenuEntry("run", 3);
+    glutAddMenuEntry("z, x control left and right rotation, c switch light", 4);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
