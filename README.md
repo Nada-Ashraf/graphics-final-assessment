@@ -9,8 +9,6 @@
 | Ali Gamal     |  2  |  9  | ali.gamal.elgaml@gmail.com |
 | Ayman Mohamad |  1  | 20  | aymanwadhaf2017@gmail.com  |
 
-## About the project
-
 ## Snapshots
 
 <p align="center">
@@ -28,8 +26,6 @@
  <img src="./report/textures.gif" width="75%" height="75%">
    <br>
 </p>
-
-## Dependencies
 
 ## Compile and run
 
