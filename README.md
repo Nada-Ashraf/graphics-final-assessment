@@ -23,11 +23,11 @@
   <p align="center" style="font-family: times, serif; font-size:14pt; font-style:italic">
     <Strong> Group No. 7 </Strong>
     <br/>
-    Nada Ashraf
+    Nada Ashraf, Sec. 2, B.N. 38
     <br/>
-    Khalid Maher
+    Khalid Maher, Sec. 1, B.N. 28
     <br/>
-    Ali Gamal
+    Ali Gamal, Sec. 2, B.N: 9
   </p>
 </p>
 

@@ -186,8 +186,13 @@ void kill_man(int x)
     else if (x < 40)
         body.shoulder_down();
     else if (x < 60)
+    {
+
         if (manAngle < 100)
             manAngle += 5;
+    }
+    else
+        manAngle -= 5;
     glutPostRedisplay();
     glutTimerFunc(50, kill_man, ++x);
 }
