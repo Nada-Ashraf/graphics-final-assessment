@@ -226,12 +226,12 @@ void intialization()
     // glutTimerFunc(0, kill_man, 0);
     // glutTimerFunc(0, timer_, 0);
 
-    // //color
-    // glEnable(GL_COLOR_MATERIAL);
-    // glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-    // glMaterialfv(GL_FRONT, GL_SPECULAR, specref);
-    // glMateriali(GL_FRONT, GL_SHININESS, 8);
-    // glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    //color
+    glEnable(GL_COLOR_MATERIAL);
+    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, specref);
+    glMateriali(GL_FRONT, GL_SHININESS, 8);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     // Keyboard
     glutKeyboardFunc(keyboard_control);

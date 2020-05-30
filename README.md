@@ -2,7 +2,7 @@
 
 <Strong> Group No. 6 </Strong>
 
-| Animation     | Sec | B.N |           Email            |
+| Name          | Sec | B.N |           Email            |
 | ------------- | :-: | :-: | :------------------------: |
 | Nada Ashraf   |  2  | 38  |  nadaashraf11@icloud.com   |
 | Khalid Maher  |  1  | 28  |   khaledbedda12@gmai.com   |
