@@ -31,11 +31,15 @@
   </p>
 </p>
 
+## About the project
+
+## Snapshots
+
+## Dependencies
+
 ## Compile and run
 
 `sh compile_run.sh`
-
-## Snapshots
 
 ## Keyboard controls
 
@@ -73,7 +77,5 @@ There's 2 objects used in the application:
 The user can change between several textures using a menu opens on right click.
 
 ## Implementation details
-
-## Dependencies
 
 ## Acknowledgements
