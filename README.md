@@ -1,35 +1,13 @@
 # Computer graphics final assessment report
 
-<br />
-<p align="center">
-  <a href="https://github.com/Nada-Ashraf/graphics-final-assessment">
-    <img src="./report/opengl_logo.png" alt="Logo" width="30%" height="30%">
-  </a>
+<Strong> Group No. 6 </Strong>
 
-  <p align="center" style="font-family: times, serif; font-size:14pt; font-style:italic">
-    Computer graphics final assessment
-  </p>
-
-<div align="center">
-
-[![GitHub issues](https://img.shields.io/github/contributors/Nada-Ashraf/graphics-final-assessment)](https://github.com/Nada-Ashraf/graphics-final-assessment/contributors)
-[![GitHub issues](https://img.shields.io/github/issues/Nada-Ashraf/graphics-final-assessment)](https://github.com/Nada-Ashraf/graphics-final-assessment/issues)
-[![GitHub forks](https://img.shields.io/github/forks/Nada-Ashraf/graphics-final-assessment)](https://github.com/Nada-Ashraf/graphics-final-assessment/network)
-[![GitHub stars](https://img.shields.io/github/stars/Nada-Ashraf/graphics-final-assessment)](https://github.com/Nada-Ashraf/graphics-final-assessment/stargazers)
-[![GitHub license](https://img.shields.io/github/license/Nada-Ashraf/graphics-final-assessment)](https://github.com/Nada-Ashraf/graphics-final-assessment/master/LICENSE)
-
-</div>
-
-  <p align="center" style="font-family: times, serif; font-size:14pt; font-style:italic">
-    <Strong> Group No. 7 </Strong>
-    <br/>
-    Nada Ashraf, Sec. 2, B.N. 38
-    <br/>
-    Khalid Maher, Sec. 1, B.N. 28
-    <br/>
-    Ali Gamal, Sec. 2, B.N: 9
-  </p>
-</p>
+| Animation     | Sec | B.N |           Email            |
+| ------------- | :-: | :-: | :------------------------: |
+| Nada Ashraf   |  2  | 38  |  nadaashraf11@icloud.com   |
+| Khalid Maher  |  1  | 28  |   khaledbedda12@gmai.com   |
+| Ali Gamal     |  2  |  9  | ali.gamal.elgaml@gmail.com |
+| Ayman Mohamad |  1  | 20  | aymanwadhaf2017@gmail.com  |
 
 ## About the project
 
@@ -43,6 +21,11 @@
 <p align="center">
 <br>
  <img src="./report/kill3.gif" width="75%" height="75%">
+   <br>
+</p>
+<p align="center">
+<br>
+ <img src="./report/textures.gif" width="75%" height="75%">
    <br>
 </p>
 
