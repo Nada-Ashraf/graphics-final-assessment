@@ -16,7 +16,6 @@ class RobotBody
 {
 private:
     // TODO change in private block and variable names
-    double position[3] = {0, 0, 0};
     ObjectHandler *obj;
     /******************************** RobotBody Parts ********************************/
     void drawArm(int, float, bool);
@@ -26,6 +25,7 @@ private:
     /****************************** End RobotBody Parts ******************************/
 
 public:
+    double position[3] = {0, 0, 0};
     int shoulder_celebration = 0;
     int lknee = 0;
     int rknee = 0;
@@ -63,6 +63,7 @@ public:
     void shoulder_down();
     void celebration();
     void celebration2();
+    void reset();
 };
 
 #endif

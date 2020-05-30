@@ -53,12 +53,14 @@ Surface fourthWall = Surface({2, -0.25, -2, -2, -0.25, -2, -2, 2, -2, 2, 2, -2})
 /*********************************** End Surfaces ************************************/
 
 /************************************* Bodies *************************************/
-RobotBody body = RobotBody(0.2, 0.8, -1, gunPath, 0.6, -0.6, -2.5, 0, 0, 3);
+RobotBody body = RobotBody(0.2, 0.8, -1, gunPath, 0.6, -0.55, -2.5, 0, 0, 3);
 /*********************************** End Bodies ***********************************/
 
 /************************************* Objects *************************************/
 ObjectHandler object1 = ObjectHandler(drumPath, -1, 0.45, 0.2, 180, 0, 0.7);
-ObjectHandler manObject = ObjectHandler(manPath, 0.2, 0.45, 1.0, 0, 0, 0.7);
+ObjectHandler manObject = ObjectHandler(manPath, 0.2, 0.4, 1.0, 0, 0, 0.7);
+// ObjectHandler manObject = ObjectHandler(manPath, -1, 0.75, 0.2, 180, 0, 1);
+
 /*********************************** End Objects ***********************************/
 
 /******************************* Functions Declerations ****************************/
@@ -125,44 +127,6 @@ void timer(int value)
         glutTimerFunc(value, timer, value);
 }
 
-void MenuFunc(int data)
-{
-    switch (data)
-    {
-    case 1:
-        body.isStand = true;
-        body.stand();
-        break;
-    case 2:
-        body.stand();
-        body.maxAngel = 20;
-        body.stepDis = 1;
-        body.speed = 0.02;
-        //Avoid calling timer twice
-        if (body.isStand)
-            glutTimerFunc(20, timer, 20);
-        body.isStand = false;
-        break;
-    case 3:
-        body.stand();
-        body.maxAngel = 55;
-        body.stepDis = 5;
-        body.speed = 0.04;
-        //Avoid calling timer twice
-        if (body.isStand)
-            glutTimerFunc(10, timer, 10);
-        body.isStand = false;
-        break;
-    case 4:
-        body.isStand = true;
-        body.stand();
-        glutTimerFunc(0, kill_man, 0);
-
-    case 5:
-        glutTimerFunc(0, celebrate, 0);
-    }
-}
-
 /******************************* Functions Definations ****************************/
 
 // TODO change this function
@@ -205,16 +169,15 @@ void display()
     // object1.drawModel();
 
     glPushMatrix();
-    glRotatef(manAngle, 1, 0, 0);
-    if (body.isStand)
-        manObject.drawModel();
+    glRotatef(manAngle, 0, 0, 1);
+    // if (body.isStand)
+    manObject.drawModel();
     glPopMatrix();
 
     glPopMatrix();
     glutSwapBuffers();
 }
 
-// TODO change this function
 void kill_man(int x)
 {
     x %= 80;
@@ -223,23 +186,10 @@ void kill_man(int x)
     else if (x < 40)
         body.shoulder_down();
     else if (x < 60)
-        manAngle += 5;
-    else
-        manAngle -= 5;
+        if (manAngle < 100)
+            manAngle += 5;
     glutPostRedisplay();
     glutTimerFunc(50, kill_man, ++x);
-
-    // x %= 40;
-    // if (x <= 19)
-    // {
-    //     body.celebration();
-    // }
-    // else
-    // {
-    //     body.celebration2();
-    // }
-    // glutPostRedisplay();
-    // glutTimerFunc(100, kill_man, ++x);
 }
 
 void celebrate(int x)
@@ -316,23 +266,14 @@ void intialization()
     glutKeyboardFunc(keyboard_control);
 
     // Menu
-    // glutCreateMenu(choose_floor_menu);
-    // glutAddMenuEntry("Choose Floor", 0);
-    // glutAddMenuEntry("------------", 0);
-    // glutAddMenuEntry("Pattern", 'c');
-    // glutAddMenuEntry("Grass", 'g');
-    // glutAddMenuEntry("Gray", 'r');
-    // glutAddMenuEntry("Metal", 'm');
-    // glutAddMenuEntry("------------", 0);
-    // glutAttachMenu(GLUT_RIGHT_BUTTON);
-
-    glutCreateMenu(MenuFunc);
-    glutAddMenuEntry("Stand", 1);
-    glutAddMenuEntry("Walk around", 2);
-    glutAddMenuEntry("run", 3);
-    glutAddMenuEntry("kill", 4);
-    glutAddMenuEntry("celebrate", 5);
-    glutAddMenuEntry("z, x control left and right rotation, c switch light", 4);
+    glutCreateMenu(choose_floor_menu);
+    glutAddMenuEntry("Choose Floor", 0);
+    glutAddMenuEntry("------------", 0);
+    glutAddMenuEntry("Pattern", 'c');
+    glutAddMenuEntry("Grass", 'g');
+    glutAddMenuEntry("Gray", 'r');
+    glutAddMenuEntry("Metal", 'm');
+    glutAddMenuEntry("------------", 0);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
@@ -365,65 +306,76 @@ void change_floor_to(std::string newFloorPath)
 
 void keyboard_control(unsigned char key, int x, int y)
 {
-    // TODO fix or remove turn_up and turn_down
     switch (key)
     {
-    case 'W':
-        cam.forward();
-        glutPostRedisplay();
-        break;
+    // camera
     case 'w':
         cam.forward();
-        glutPostRedisplay();
-        break;
-    case 'S':
-        cam.backward();
         glutPostRedisplay();
         break;
     case 's':
         cam.backward();
         glutPostRedisplay();
         break;
-    case 'D':
-        cam.turn_right();
-        glutPostRedisplay();
-        break;
     case 'd':
         cam.turn_right();
-        glutPostRedisplay();
-        break;
-    case 'A':
-        cam.turn_left();
         glutPostRedisplay();
         break;
     case 'a':
         cam.turn_left();
         glutPostRedisplay();
         break;
-    case 'P':
-        cam.turn_left();
-        glutPostRedisplay();
-        break;
-    case 'p':
-        cam.turn_left();
-        glutPostRedisplay();
-        break;
-    case 'Q':
-        cam.turn_up();
-        glutPostRedisplay();
-        break;
     case 'q':
         cam.turn_up();
-        glutPostRedisplay();
-        break;
-    case 'E':
-        cam.turn_down();
         glutPostRedisplay();
         break;
     case 'e':
         cam.turn_down();
         glutPostRedisplay();
         break;
+    // Game
+    case 'x': // Turn right
+        body.curTurn = (body.curTurn - 5) % 360;
+        glutPostRedisplay();
+        break;
+    case 'z': // Turn left
+        body.curTurn = (body.curTurn + 5) % 360;
+        glutPostRedisplay();
+        break;
+    case 'm': // Stand
+        body.isStand = true;
+        glutPostRedisplay();
+        break;
+    case 'n': // walk
+        body.stand();
+        body.maxAngel = 20;
+        body.stepDis = 1;
+        body.speed = 0.02;
+        //Avoid calling timer twice
+        if (body.isStand)
+            glutTimerFunc(20, timer, 20);
+        body.isStand = false;
+        break;
+    case 'k': // kill
+        body.isStand = true;
+        body.stand();
+        body.displayRobotBody();
+        glutTimerFunc(0, kill_man, 0);
+        break;
+    case 'b': //run
+
+        body.stand();
+        body.maxAngel = 55;
+        body.stepDis = 5;
+        body.speed = 0.04;
+        //Avoid calling timer twice
+        if (body.isStand)
+            glutTimerFunc(10, timer, 10);
+        body.isStand = false;
+        break;
+    case 'v':
+        glutTimerFunc(0, celebrate, 0);
+
     default:
         break;
     }

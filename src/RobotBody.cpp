@@ -54,7 +54,7 @@ void RobotBody::drawArm(int angle, float t, bool isRight)
     glScalef(0.3, 1.6, 0.4);
     glutSolidCube(1.0);
     glPushMatrix();
-    if (this->obj && !isRight && isStand)
+    if (this->obj && !isRight)
     {
         obj->drawModel();
     }
@@ -258,6 +258,13 @@ void RobotBody::celebration2()
     // if (elbow < 0)
     //     elbow = 0;
     glutPostRedisplay();
+}
+
+void RobotBody::reset()
+{
+    position[0] = 0.2;
+    position[1] = 0.8;
+    position[2] = -1.0;
 }
 
 // void timer(int value)
