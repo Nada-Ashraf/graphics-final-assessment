@@ -19,20 +19,16 @@ private:
     ObjectHandler *obj;
     /******************************** RobotBody Parts ********************************/
     void drawArm(int, float, bool);
-    void drawLowerBody(float, int, int);
+    void drawLowerBody(float, int);
     void drawHeadTrunk();
     int shoulder_attack = 0;
     /****************************** End RobotBody Parts ******************************/
 
 public:
     double position[3] = {0, 0, 0};
-    int shoulder_celebration = 0;
-    int lknee = 0;
-    int rknee = 0;
     int swingLeft = 0;
     int swingRight = 0;
     bool isSwingForward = false;
-    bool isLighting = false;
     int curTurn = 180; // current facing angle
     int maxAngel = 0;  // Maximum swing angle
     int stepDis = 0;   // Thigh swing speed
@@ -53,16 +49,15 @@ public:
               float angle_y,
               float angle_x,
               float scale);
-    /**************************** End Constructors ******************************/
     // Display
     void displayRobotBody();
-    // helper function
+    /**************************** End Constructors ******************************/
+    /***************************** Movement *********************************/
     void stand();
-    void walking();
+    void walk();
     void shoulder_up();
     void shoulder_down();
-    void celebration();
-    void celebration2();
+    /**************************** End Movement ******************************/
 };
 
 #endif

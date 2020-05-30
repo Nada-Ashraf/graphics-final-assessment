@@ -46,7 +46,7 @@
 
 ### Camera
 
-| Animation       | key |
+| Movement        | key |
 | --------------- | :-: |
 | Moving Forward  |  w  |
 | Moving Backward |  s  |

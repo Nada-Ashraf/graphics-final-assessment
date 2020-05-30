@@ -6,10 +6,6 @@
 #include <stdio.h>
 #include <iostream>
 
-float manAngle = 0;
-GLfloat specref[] = {1.0f, 1.0f, 0.3f, 0.1f};
-bool kill = false;
-
 /************************************* Window *************************************/
 const int WINDOW_WIDTH = 1024;
 const int WINDOW_HEIGHT = 720;
@@ -40,7 +36,8 @@ GLfloat lightPosition[] = {0.5, 5.0, 0.0, 1.0},
         lightAmb[] = {0.0, 0.0, 0.0, 0.0},
         lightDiff[] = {0.5, 0.5, 0.5, 1.0};
 /********************************** End Properties *********************************/
-
+float manAngle = 0;
+bool kill = false;
 Camera cam;
 /************************************* Surfaces *************************************/
 // floor
@@ -49,62 +46,38 @@ Surface floorSurface = Surface({-2, -0.25, 2, 2, -0.25, 2, 2, -0.25, -2, -2, -0.
 Surface firstWall = Surface({-2, -0.25, 2, -2, -0.25, -2, -2, 2, -2, -2, 2, 2});
 Surface secondWall = Surface({2, -0.25, 2, 2, -0.25, -2, 2, 2, -2, 2, 2, 2});
 Surface thirdWall = Surface({2, -0.25, -2, -2, -0.25, -2, -2, 2, -2, 2, 2, -2});
-Surface fourthWall = Surface({2, -0.25, -2, -2, -0.25, -2, -2, 2, -2, 2, 2, -2});
 
 /*********************************** End Surfaces ************************************/
 
-/************************************* Bodies *************************************/
+/******************************** Objects and bodies **********************************/
 RobotBody body = RobotBody(-1, 0.8, -1, gunPath, 0.1, -0.55, -1.6, 0, 0, 1.0);
-// RobotBody body = RobotBody(0.2, 0.8, -1, gunPath, 0.1, -0.55, -1.6, 0, 0, 1.0);
-/*********************************** End Bodies ***********************************/
-
-/************************************* Objects *************************************/
-ObjectHandler object1 = ObjectHandler(drumPath, -1, 0.45, 0.2, 180, 0, 0.7);
+ObjectHandler drumObject = ObjectHandler(drumPath, 1, 0.45, -0.8, 180, 0, 0.7);
 ObjectHandler manObject = ObjectHandler(manPath, 0.2, 0.4, 1.0, 0, 0, 0.7);
-// ObjectHandler manObject = ObjectHandler(manPath, -1, 0.75, 0.2, 180, 0, 1);
 
 /*********************************** End Objects ***********************************/
 
 /******************************* Functions Declerations ****************************/
-void walking_timer(int x);
+void walking_timer(int value);
 void display();
-void kill_man(int x);
-void celebrate(int x);
+void kill_timer(int x);
 void intialization();
 void choose_floor_menu(int key);
 void change_floor_to(std::string newFloorPath);
 void keyboard_control(unsigned char key, int x, int y);
 /**************************** End Functions Declerations ***************************/
 
-int main(int argc, char **argv)
-{
-    glutInit(&argc, argv);
-    intialization();
-    glutMainLoop();
-    return 0;
-}
-
+/******************************* Functions Definations ****************************/
 void walking_timer(int value)
 {
-    body.walking();
+    body.walk();
     if (!body.isStand)
         glutTimerFunc(value, walking_timer, value);
 }
-
-/******************************* Functions Definations ****************************/
-
-// TODO change this function
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glShadeModel(GL_FLAT);
-    //color
-    // glEnable(GL_COLOR_MATERIAL);
-    // glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-    // glMaterialfv(GL_FRONT, GL_SPECULAR, specref);
-    // glMateriali(GL_FRONT, GL_SHININESS, 8);
-    // glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -124,17 +97,15 @@ void display()
     firstWall.display_surface();
     secondWall.display_surface();
     thirdWall.display_surface();
-    fourthWall.display_surface();
 
     glPushMatrix();
     body.displayRobotBody();
     glPopMatrix();
 
-    // object1.drawModel();
+    drumObject.drawModel();
 
     glPushMatrix();
     glRotatef(manAngle, 0, 0, 1);
-    // if (body.isStand)
     manObject.drawModel();
     glPopMatrix();
 
@@ -142,7 +113,7 @@ void display()
     glutSwapBuffers();
 }
 
-void kill_man(int x)
+void kill_timer(int x)
 {
     if (kill == true)
     {
@@ -159,26 +130,8 @@ void kill_man(int x)
         else if (x < 80)
             manAngle -= 5;
         glutPostRedisplay();
-        glutTimerFunc(50, kill_man, ++x);
+        glutTimerFunc(50, kill_timer, ++x);
     }
-}
-
-void celebrate(int x)
-{
-    x %= 40;
-    if (x <= 19)
-    {
-        body.celebration();
-    }
-    else
-    {
-        body.celebration2();
-    }
-    // body.lknee = 0;
-    // body.rknee = 0;
-    // body.shoulder_celebration = 0;
-    glutPostRedisplay();
-    glutTimerFunc(100, celebrate, ++x);
 }
 
 void intialization()
@@ -193,7 +146,6 @@ void intialization()
     firstWall.change_texture(grayTexturePath.c_str());
     secondWall.change_texture(grayTexturePath.c_str());
     thirdWall.change_texture(grayTexturePath.c_str());
-    fourthWall.change_texture(grayTexturePath.c_str());
 
     glEnable(GL_LIGHTING);
 
@@ -222,16 +174,6 @@ void intialization()
     glMatrixMode(GL_PROJECTION);
     gluPerspective(90.0, WINDOW_RATIO, 0.1, 60.0);
     glutDisplayFunc(display);
-    // glutTimerFunc(0, timer, 0);
-    // glutTimerFunc(0, kill_man, 0);
-    // glutTimerFunc(0, timer_, 0);
-
-    //color
-    glEnable(GL_COLOR_MATERIAL);
-    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, specref);
-    glMateriali(GL_FRONT, GL_SHININESS, 8);
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     // Keyboard
     glutKeyboardFunc(keyboard_control);
@@ -333,10 +275,9 @@ void keyboard_control(unsigned char key, int x, int y)
         body.stand();
         body.displayRobotBody();
         kill = true;
-        glutTimerFunc(0, kill_man, 0);
+        glutTimerFunc(0, kill_timer, 0);
         break;
     case 'b': //run
-
         body.stand();
         body.maxAngel = 55;
         body.stepDis = 5;
@@ -346,11 +287,20 @@ void keyboard_control(unsigned char key, int x, int y)
             glutTimerFunc(10, walking_timer, 10);
         body.isStand = false;
         break;
-    case 'v':
-        glutTimerFunc(0, celebrate, 0);
-
     default:
         break;
     }
 }
 /**************************** End Functions Definations ***************************/
+
+/************************************* Main *************************************/
+
+int main(int argc, char **argv)
+{
+    glutInit(&argc, argv);
+    intialization();
+    glutMainLoop();
+    return 0;
+}
+
+/*********************************** End Main ***********************************/
