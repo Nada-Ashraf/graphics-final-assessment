@@ -14,8 +14,8 @@ private:
     void cross_product(const std::vector<double> &a, const std::vector<double> &b, std::vector<double> &c);
 
 public:
-    void initialize();
     void forward_backword(double speed);
+    void initialize();
     void turn_up();
     void turn_down();
     void turn_right();

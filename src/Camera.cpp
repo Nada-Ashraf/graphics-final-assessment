@@ -39,22 +39,14 @@ void Camera::rotate(const std::vector<double> &dir, double theta, std::vector<do
 
 void Camera::turn_up()
 {
-    std::vector<double> axis = {0, 0, 0};
-    cross_product(eye, up, axis);
-    normalize(axis);
-    rotate(axis, 0.1, eye);
-    rotate(axis, 0.1, up);
-    normalize(up);
+    double speed = 0.04;
+    center[1] += speed;
 }
 
 void Camera::turn_down()
 {
-    std::vector<double> axis = {0, 0, 0};
-    cross_product(eye, up, axis);
-    normalize(axis);
-    rotate(axis, -0.1, eye);
-    rotate(axis, -0.1, up);
-    normalize(up);
+    double speed = -0.04;
+    center[1] += speed;
 }
 
 void Camera::turn_right()

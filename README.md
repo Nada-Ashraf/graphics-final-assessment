@@ -78,6 +78,15 @@ The user can change between several textures using a menu opens on right click.
 
 ## Implementation details
 
+The application cosists of the following classes:
+
+| Class         |                     Description                      |
+| ------------- | :--------------------------------------------------: |
+| RobotBody     |        Draw and control robot body movements         |
+| Camera        |           Initializes and controls camera            |
+| Surface       | Draws a rectangular surface with a Texture put on it |
+| ObjectHandler | Loading object files and drawing them into the scene |
+
 ### Camera
 
 - For camera movements we used the function `rotate()` which for transformation to be applied to all scene points, the function, we send `axis of rotation` and `angle of rotation` each call
@@ -88,4 +97,44 @@ The user can change between several textures using a menu opens on right click.
 
 ### Body
 
+- The `position` array is passed by the user when constructing the body, it defines where will the body be in the scene.
+- The body is holding a sword in his hand, so it's sent to the body constructor to create a new `ObjectHandler` instance.
+
+### Surface
+
+- The `vertices` array is passed by the user and it defines the 4 vertices that are going to draw the surface.
+- The `change_texture` method takes the name of texture file and load it.
+- The `display_surface` draws the surface with the loaded texture.
+
+### ObjectHandler
+
+- The object is loaded using `glmReadOBJ()` function which is from `glm` library, this library loads OBJ files and MTL files, and can display them using OpenGL.
+
+- The object position is defined by variables: `x`, `y`, `z`, `angle_y`, `angle_x`, `scale`, these variables determine the position, scale and angle of the drawn object. They are passed by the user when constructing the object.
+
+### Main function
+
 ## Acknowledgements
+
+- `ObjectaHandler` and `Surface` classes use `imageloader.cpp` and `glm.cpp` internally, `glm.cpp` and `imageloader.cpp` were provided to us in Tutorial 5 and we did not write them ourselves.
+- https://github.com/devernay/glm
+
+## Problems faced
+
+We faced some problems with compiling the project at first because it's a multi-class application, then we realized we should construct a header file for each class and import it instead of importing the cpp file, and we made a cmake file for the project.
+
+## Computer Graphics Biomedical Applications
+
+Computer graphics applications are used extensively in medical
+training. From the early anatomy or biology classes in schools, where
+children are starting to use computers to interact and discover the human
+body, to advanced professional-oriented courses, 3D graphic applications
+are the key to medical skill building.
+
+Many applications out there include static 3D models that do not
+require real-time effort as model, textures and layers are pre-calculated
+and simply processed for viewing from one angle or another.
+
+In our application we learned how to draw a robot body, load an object and interact with it,
+also we learned how to use camera to view from different angles,
+these skills are the basics of some applications such as [ZygoteBody](https://www.zygotebody.com/)
