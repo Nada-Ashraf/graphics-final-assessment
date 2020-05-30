@@ -154,8 +154,10 @@ void MenuFunc(int data)
         body.isStand = false;
         break;
     case 4:
-        // body.displayRobotBody();
+        body.isStand = true;
+        body.stand();
         glutTimerFunc(0, kill_man, 0);
+
     case 5:
         glutTimerFunc(0, celebrate, 0);
     }

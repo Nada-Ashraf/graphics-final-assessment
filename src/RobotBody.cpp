@@ -46,7 +46,7 @@ void RobotBody::drawArm(int angle, float t, bool isRight)
     glTranslatef(t, 1.75, 0.0);
     glRotatef((GLfloat)angle, 1.0, 0.0, 0.0);
     // glRotatef((GLfloat)shoulder_celebration, 0.0, 0.0, 1.0);
-    if (!isRight)
+    if (!isRight && isStand)
         glRotatef((GLfloat)shoulder_attack, 1.0, 0.0, 0.0);
     glTranslatef(0.0, -0.5, 0.0);
     glColor3f(0.8, 0.4, 0.5);
@@ -54,7 +54,7 @@ void RobotBody::drawArm(int angle, float t, bool isRight)
     glScalef(0.3, 1.6, 0.4);
     glutSolidCube(1.0);
     glPushMatrix();
-    if (this->obj && !isRight)
+    if (this->obj && !isRight && isStand)
     {
         obj->drawModel();
     }

@@ -40,6 +40,7 @@ public:
     bool isStand = true;
     float curDistanceX = 0, curDistanceZ = 0; // current distance
     float legDis = 0;
+
     /***************************** Constructors *********************************/
     RobotBody(double x, double y, double z);
     RobotBody(double x,
