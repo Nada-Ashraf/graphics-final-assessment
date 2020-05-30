@@ -65,6 +65,7 @@ ObjectHandler manObject = ObjectHandler(manPath, 0.2, 0.45, 1.0, 0, 0, 0.7);
 void timer(int x);
 void display();
 void kill_man(int x);
+void celebrate(int x);
 void intialization();
 void choose_floor_menu(int key);
 void change_floor_to(std::string newFloorPath);
@@ -78,31 +79,6 @@ int main(int argc, char **argv)
     glutMainLoop();
     return 0;
 }
-
-// void timer(int x)
-// {
-//     x %= 80;
-//     if (x < 20)
-//     // body.walking();
-//     {
-//         body.stand();
-//         body.maxAngel = 20;
-//         body.stepDis = 1;
-//         body.speed = 0.02;
-//         //Avoid calling timer twice
-//         if (body.isStand)
-//             glutTimerFunc(20, timer, 20);
-//         body.isStand = false;
-//     }
-//     else if (x < 40)
-//         body.stand();
-//     else if (x < 60)
-//         manAngle += 5;
-//     else
-//         manAngle -= 5;
-//     glutPostRedisplay();
-//     glutTimerFunc(50, timer, ++x);
-// }
 
 void timer(int value)
 {
@@ -177,6 +153,11 @@ void MenuFunc(int data)
             glutTimerFunc(10, timer, 10);
         body.isStand = false;
         break;
+    case 4:
+        // body.displayRobotBody();
+        glutTimerFunc(0, kill_man, 0);
+    case 5:
+        glutTimerFunc(0, celebrate, 0);
     }
 }
 
@@ -189,11 +170,11 @@ void display()
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glShadeModel(GL_FLAT);
     //color
-    glEnable(GL_COLOR_MATERIAL);
-    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, specref);
-    glMateriali(GL_FRONT, GL_SHININESS, 8);
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    // glEnable(GL_COLOR_MATERIAL);
+    // glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+    // glMaterialfv(GL_FRONT, GL_SPECULAR, specref);
+    // glMateriali(GL_FRONT, GL_SHININESS, 8);
+    // glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -234,18 +215,33 @@ void display()
 // TODO change this function
 void kill_man(int x)
 {
-    // x %= 80;
-    // if (x < 20)
-    //     body.shoulder_up();
-    // else if (x < 40)
-    //     body.shoulder_down();
-    // else if (x < 60)
-    //     manAngle += 5;
-    // else
-    //     manAngle -= 5;
-    // glutPostRedisplay();
-    // glutTimerFunc(50, kill_man, ++x);
+    x %= 80;
+    if (x < 20)
+        body.shoulder_up();
+    else if (x < 40)
+        body.shoulder_down();
+    else if (x < 60)
+        manAngle += 5;
+    else
+        manAngle -= 5;
+    glutPostRedisplay();
+    glutTimerFunc(50, kill_man, ++x);
 
+    // x %= 40;
+    // if (x <= 19)
+    // {
+    //     body.celebration();
+    // }
+    // else
+    // {
+    //     body.celebration2();
+    // }
+    // glutPostRedisplay();
+    // glutTimerFunc(100, kill_man, ++x);
+}
+
+void celebrate(int x)
+{
     x %= 40;
     if (x <= 19)
     {
@@ -255,8 +251,11 @@ void kill_man(int x)
     {
         body.celebration2();
     }
+    // body.lknee = 0;
+    // body.rknee = 0;
+    // body.shoulder_celebration = 0;
     glutPostRedisplay();
-    glutTimerFunc(100, kill_man, ++x);
+    glutTimerFunc(100, celebrate, ++x);
 }
 
 void intialization()
@@ -301,7 +300,7 @@ void intialization()
     gluPerspective(90.0, WINDOW_RATIO, 0.1, 60.0);
     glutDisplayFunc(display);
     // glutTimerFunc(0, timer, 0);
-    glutTimerFunc(0, kill_man, 0);
+    // glutTimerFunc(0, kill_man, 0);
     // glutTimerFunc(0, timer_, 0);
 
     // //color
@@ -329,6 +328,8 @@ void intialization()
     glutAddMenuEntry("Stand", 1);
     glutAddMenuEntry("Walk around", 2);
     glutAddMenuEntry("run", 3);
+    glutAddMenuEntry("kill", 4);
+    glutAddMenuEntry("celebrate", 5);
     glutAddMenuEntry("z, x control left and right rotation, c switch light", 4);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 }

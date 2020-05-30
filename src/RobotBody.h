@@ -23,12 +23,12 @@ private:
     void drawLowerBody(float, int, int);
     void drawHeadTrunk();
     int shoulder_attack = 0;
-    int shoulder_celebration = -90;
-    int lknee = 0;
-    int rknee = 0;
     /****************************** End RobotBody Parts ******************************/
 
 public:
+    int shoulder_celebration = 0;
+    int lknee = 0;
+    int rknee = 0;
     int swingLeft = 0;
     int swingRight = 0;
     bool isSwingForward = false;
