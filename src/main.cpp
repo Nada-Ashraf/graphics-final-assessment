@@ -6,8 +6,9 @@
 #include <stdio.h>
 #include <iostream>
 
-float manAngle = 0; // TODO Change this
+float manAngle = 0;
 GLfloat specref[] = {1.0f, 1.0f, 0.3f, 0.1f};
+bool kill = false;
 
 /************************************* Window *************************************/
 const int WINDOW_WIDTH = 1024;
@@ -19,7 +20,7 @@ const float WINDOW_RATIO = ((float)WINDOW_WIDTH) / WINDOW_HEIGHT;
 /* Objects */
 std::string drumPath = "./Objects/drum.obj";
 std::string manPath = "./Objects/al.obj";
-std::string gunPath = "./Objects/sword.obj";
+std::string gunPath = "./Objects/ACR.obj";
 /* Textures */
 std::string grayTexturePath = "./Textures/gray.bmp";
 std::string patternTexturePath = "./Textures/pattern.bmp";
@@ -53,7 +54,8 @@ Surface fourthWall = Surface({2, -0.25, -2, -2, -0.25, -2, -2, 2, -2, 2, 2, -2})
 /*********************************** End Surfaces ************************************/
 
 /************************************* Bodies *************************************/
-RobotBody body = RobotBody(0.2, 0.8, -1, gunPath, 0.6, -0.55, -2.5, 0, 0, 3);
+RobotBody body = RobotBody(-1, 0.8, -1, gunPath, 0.1, -0.55, -1.6, 0, 0, 1.0);
+// RobotBody body = RobotBody(0.2, 0.8, -1, gunPath, 0.1, -0.55, -1.6, 0, 0, 1.0);
 /*********************************** End Bodies ***********************************/
 
 /************************************* Objects *************************************/
@@ -64,7 +66,7 @@ ObjectHandler manObject = ObjectHandler(manPath, 0.2, 0.4, 1.0, 0, 0, 0.7);
 /*********************************** End Objects ***********************************/
 
 /******************************* Functions Declerations ****************************/
-void timer(int x);
+void walking_timer(int x);
 void display();
 void kill_man(int x);
 void celebrate(int x);
@@ -82,49 +84,11 @@ int main(int argc, char **argv)
     return 0;
 }
 
-void timer(int value)
+void walking_timer(int value)
 {
-    // value %= 80;
-    int tempTurn = body.curTurn;
-    body.curDistanceX = body.curDistanceX - body.speed * sin((GLfloat)tempTurn / 360 * 3.14 * 2);
-    body.curDistanceZ = body.curDistanceZ - body.speed * cos((GLfloat)tempTurn / 360 * 3.14 * 2);
-    if (!body.isSwingForward)
-    {
-        body.swingLeft = (body.swingLeft + body.stepDis);
-        body.swingRight = (body.swingRight - body.stepDis);
-        if (body.swingLeft > 0)
-        {
-            body.legDis = body.legDis - body.stepDis * 1.2;
-        }
-        else
-        {
-            body.legDis = body.legDis + body.stepDis * 1.2;
-        }
-    }
-    else
-    {
-        body.swingLeft = (body.swingLeft - body.stepDis);
-        body.swingRight = (body.swingRight + body.stepDis);
-        if (body.swingLeft < 0)
-        {
-            body.legDis = body.legDis - body.stepDis * 1.2;
-        }
-        else
-        {
-            body.legDis = body.legDis + body.stepDis * 1.2;
-        }
-    }
-    if (body.swingLeft > body.maxAngel)
-    {
-        body.isSwingForward = true;
-    }
-    if (body.swingLeft < body.maxAngel * -1)
-    {
-        body.isSwingForward = false;
-    }
-    glutPostRedisplay();
+    body.walking();
     if (!body.isStand)
-        glutTimerFunc(value, timer, value);
+        glutTimerFunc(value, walking_timer, value);
 }
 
 /******************************* Functions Definations ****************************/
@@ -180,21 +144,23 @@ void display()
 
 void kill_man(int x)
 {
-    x %= 80;
-    if (x < 20)
-        body.shoulder_up();
-    else if (x < 40)
-        body.shoulder_down();
-    else if (x < 60)
+    if (kill == true)
     {
-
-        if (manAngle < 100)
-            manAngle += 5;
+        x %= 80;
+        if (x < 20)
+            body.shoulder_up();
+        else if (x < 40)
+            body.shoulder_down();
+        else if (x < 60)
+        {
+            if (manAngle < 100)
+                manAngle += 5;
+        }
+        else if (x < 80)
+            manAngle -= 5;
+        glutPostRedisplay();
+        glutTimerFunc(50, kill_man, ++x);
     }
-    else
-        manAngle -= 5;
-    glutPostRedisplay();
-    glutTimerFunc(50, kill_man, ++x);
 }
 
 void celebrate(int x)
@@ -356,15 +322,17 @@ void keyboard_control(unsigned char key, int x, int y)
         body.maxAngel = 20;
         body.stepDis = 1;
         body.speed = 0.02;
+        kill = false;
         //Avoid calling timer twice
         if (body.isStand)
-            glutTimerFunc(20, timer, 20);
+            glutTimerFunc(20, walking_timer, 20);
         body.isStand = false;
         break;
     case 'k': // kill
         body.isStand = true;
         body.stand();
         body.displayRobotBody();
+        kill = true;
         glutTimerFunc(0, kill_man, 0);
         break;
     case 'b': //run
@@ -375,7 +343,7 @@ void keyboard_control(unsigned char key, int x, int y)
         body.speed = 0.04;
         //Avoid calling timer twice
         if (body.isStand)
-            glutTimerFunc(10, timer, 10);
+            glutTimerFunc(10, walking_timer, 10);
         body.isStand = false;
         break;
     case 'v':

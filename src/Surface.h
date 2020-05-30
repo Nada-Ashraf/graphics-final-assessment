@@ -11,9 +11,9 @@
 class Surface
 {
 private:
-    GLuint id;
     std::vector<float> vertices;
     GLuint load_texture(Image *image);
+    GLuint textureId;
 
 public:
     Surface(std::vector<float> vec);

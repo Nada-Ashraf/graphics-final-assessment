@@ -63,7 +63,6 @@ public:
     void shoulder_down();
     void celebration();
     void celebration2();
-    void reset();
 };
 
 #endif

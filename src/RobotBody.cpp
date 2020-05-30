@@ -201,20 +201,20 @@ void RobotBody::walking()
         isSwingForward = false;
     }
     // displayRobotBody();
-    // glutPostRedisplay();
+    glutPostRedisplay();
 }
 
 void RobotBody::shoulder_up()
 {
     shoulder_attack = (shoulder_attack + 5) % 360;
-    if (shoulder_attack > 70)
-        shoulder_attack = 70;
+    if (shoulder_attack > 20)
+        shoulder_attack = 20;
 }
 void RobotBody::shoulder_down()
 {
     shoulder_attack = (shoulder_attack - 5) % 360;
-    if (shoulder_attack < -90)
-        shoulder_attack = -90;
+    if (shoulder_attack < 0)
+        shoulder_attack = 0;
 }
 
 void RobotBody::celebration()
@@ -259,57 +259,3 @@ void RobotBody::celebration2()
     //     elbow = 0;
     glutPostRedisplay();
 }
-
-void RobotBody::reset()
-{
-    position[0] = 0.2;
-    position[1] = 0.8;
-    position[2] = -1.0;
-}
-
-// void timer(int value)
-// {
-//     // value %= 80;
-//     int tempTurn = body.curTurn;
-//     body.curDistanceX = body.curDistanceX - body.speed * sin((GLfloat)tempTurn / 360 * 3.14 * 2);
-//     body.curDistanceZ = body.curDistanceZ - body.speed * cos((GLfloat)tempTurn / 360 * 3.14 * 2);
-//     if (!body.isSwingForward)
-//     {
-//         body.swingLeft = (body.swingLeft + body.stepDis);
-//         body.swingRight = (body.swingRight - body.stepDis);
-//         if (body.swingLeft > 0)
-//         {
-//             body.legDis = body.legDis - body.stepDis * 1.2;
-//         }
-//         else
-//         {
-//             body.legDis = body.legDis + body.stepDis * 1.2;
-//         }
-//     }
-//     else
-//     {
-//         body.swingLeft = (body.swingLeft - body.stepDis);
-//         body.swingRight = (body.swingRight + body.stepDis);
-//         if (body.swingLeft < 0)
-//         {
-//             body.legDis = body.legDis - body.stepDis * 1.2;
-//         }
-//         else
-//         {
-//             body.legDis = body.legDis + body.stepDis * 1.2;
-//         }
-//     }
-//     if (body.swingLeft > body.maxAngel)
-//     {
-//         body.isSwingForward = true;
-//     }
-//     if (body.swingLeft < body.maxAngel * -1)
-//     {
-//         body.isSwingForward = false;
-//     }
-//     body.displayRobotBody();
-//     glutPostRedisplay();
-//     if (!body.isStand)
-//         glutTimerFunc(value, timer, value);
-//     // glutTimerFunc(20, timer, ++value);
-// }

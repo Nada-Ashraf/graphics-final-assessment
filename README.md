@@ -35,6 +35,17 @@
 
 ## Snapshots
 
+<p align="center">
+<br>
+ <img src="./report/kill.gif" width="75%" height="75%">
+   <br>
+</p>
+<p align="center">
+<br>
+ <img src="./report/kill3.gif" width="75%" height="75%">
+   <br>
+</p>
+
 ## Dependencies
 
 ## Compile and run
