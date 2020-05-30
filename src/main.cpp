@@ -310,11 +310,11 @@ void keyboard_control(unsigned char key, int x, int y)
     {
     // camera
     case 'w':
-        cam.forward();
+        cam.forward_backword(0.01);
         glutPostRedisplay();
         break;
     case 's':
-        cam.backward();
+        cam.forward_backword(-0.01);
         glutPostRedisplay();
         break;
     case 'd':

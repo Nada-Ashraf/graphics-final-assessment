@@ -79,13 +79,3 @@ void Camera::forward_backword(double speed)
     eye[0] += dir[0] * speed, eye[2] += dir[2] * speed;
     center[0] += dir[0] * speed, center[2] += dir[2] * speed;
 }
-
-void Camera::forward()
-{
-    forward_backword(0.01);
-}
-
-void Camera::backward()
-{
-    forward_backword(-0.01);
-}

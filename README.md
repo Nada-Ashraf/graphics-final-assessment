@@ -78,4 +78,14 @@ The user can change between several textures using a menu opens on right click.
 
 ## Implementation details
 
+### Camera
+
+- For camera movements we used the function `rotate()` which for transformation to be applied to all scene points, the function, we send `axis of rotation` and `angle of rotation` each call
+
+- For `turn_up()` , `turn_down()` movements, we call `rotate()` function twice, once with `eye` vector and the other with `up` vector.
+
+- For `turn_right()` , `turn_left()` movements, we call `rotate()` function only one time with the `eye` vector since the vertical direction with of the camera is parallel to the `Up` vector so what we need to do is to rotate all scene around up vector (only the eye is changed).
+
+### Body
+
 ## Acknowledgements
