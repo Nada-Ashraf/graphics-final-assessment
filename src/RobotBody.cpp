@@ -162,43 +162,37 @@ void RobotBody::stand()
 void RobotBody::walk()
 {
     int tempTurn = curTurn;
-    curDistanceX = curDistanceX - speed * sin((GLfloat)tempTurn / 360 * 3.14 * 2);
-    curDistanceZ = curDistanceZ - speed * cos((GLfloat)tempTurn / 360 * 3.14 * 2);
-    if (!isSwingForward)
+    bool canMoveForward = (curDistanceZ < 2.6) || (curTurn <= 50 || curTurn >= 270);
+    if (canMoveForward)
     {
-        swingLeft = (swingLeft + stepDis);
-        swingRight = (swingRight - stepDis);
-        if (swingLeft > 0)
+        curDistanceX -= speed * sin((GLfloat)tempTurn / 360 * 3.14 * 2);
+        curDistanceZ -= speed * cos((GLfloat)tempTurn / 360 * 3.14 * 2);
+        if (!isSwingForward)
         {
-            legDis = legDis - stepDis * 1.2;
+            swingLeft += stepDis, swingRight -= stepDis;
+            if (swingLeft > 0)
+                legDis -= stepDis * 1.2;
+            else
+                legDis += stepDis * 1.2;
         }
         else
         {
-            legDis = legDis + stepDis * 1.2;
+            swingLeft -= stepDis, swingRight += stepDis;
+            if (swingLeft < 0)
+                legDis -= stepDis * 1.2;
+            else
+                legDis += stepDis * 1.2;
         }
+        if (swingLeft > maxAngel)
+            isSwingForward = true;
+        if (swingLeft < maxAngel * -1)
+            isSwingForward = false;
     }
     else
     {
-        swingLeft = (swingLeft - stepDis);
-        swingRight = (swingRight + stepDis);
-        if (swingLeft < 0)
-        {
-            legDis = legDis - stepDis * 1.2;
-        }
-        else
-        {
-            legDis = legDis + stepDis * 1.2;
-        }
+        this->stand();
     }
-    if (swingLeft > maxAngel)
-    {
-        isSwingForward = true;
-    }
-    if (swingLeft < maxAngel * -1)
-    {
-        isSwingForward = false;
-    }
-    // displayRobotBody();
+
     glutPostRedisplay();
 }
 
