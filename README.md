@@ -57,10 +57,11 @@
 
 ## Objects
 
-There's 2 objects used in the application:
+There's 3 objects used in the application:
 
 1. Object of a man who get killed by the robot
-2. Object of a sword which the robot use to kill the man
+2. Object of a gun which the robot use to kill the man
+3. Object of an oil drum just to add some spice to the scene
 
 ## Textures
 
@@ -104,14 +105,9 @@ The application cosists of the following classes:
 
 ### Main function
 
-## Acknowledgements
-
-- `ObjectaHandler` and `Surface` classes use `imageloader.cpp` and `glm.cpp` internally, `glm.cpp` and `imageloader.cpp` were provided to us in Tutorial 5 and we did not write them ourselves.
-- https://github.com/devernay/glm
-
 ## Problems faced
 
-We faced some problems with compiling the project at first because it's a multi-class application, then we realized we should construct a header file for each class and import it instead of importing the cpp file, and we made a cmake file for the project.
+- We faced some problems with compiling the project at first because it's a multi-class application, then we realized we should construct a header file for each class and import it instead of importing the cpp file, and we made a cmake file for compoling the project to make things more organized.
 
 ## Computer Graphics Biomedical Applications
 
@@ -128,3 +124,8 @@ and simply processed for viewing from one angle or another.
 In our application we learned how to draw a robot body, load an object and interact with it,
 also we learned how to use camera to view from different angles,
 these skills are the basics of some applications such as [ZygoteBody](https://www.zygotebody.com/)
+
+## Acknowledgements
+
+- `ObjectaHandler` and `Surface` classes use `imageloader.cpp` and `glm.cpp` internally, `glm.cpp` and `imageloader.cpp` were provided to us in Tutorial 5 and we did not write them ourselves.
+- https://github.com/devernay/glm

@@ -17,6 +17,8 @@ const float WINDOW_RATIO = ((float)WINDOW_WIDTH) / WINDOW_HEIGHT;
 std::string drumPath = "./Objects/drum.obj";
 std::string manPath = "./Objects/al.obj";
 std::string gunPath = "./Objects/ACR.obj";
+std::string planePath = "./Objects/f-16.obj";
+
 /* Textures */
 std::string grayTexturePath = "./Textures/gray.bmp";
 std::string patternTexturePath = "./Textures/pattern.bmp";
@@ -55,6 +57,7 @@ Surface thirdWall = Surface({2, -0.25, -2, -2, -0.25, -2, -2, 2, -2, 2, 2, -2});
 RobotBody body = RobotBody(-1, 0.8, -1, gunPath, 0.1, -0.55, -1.6, 0, 0, 1.0);
 ObjectHandler drumObject = ObjectHandler(drumPath, 1, 0.45, -0.8, 180, 0, 0.7);
 ObjectHandler manObject = ObjectHandler(manPath, 0.2, 0.4, 1.0, 0, 0, 0.7);
+ObjectHandler plane = ObjectHandler(planePath, 1, 5, -1, 0, 0, 2);
 
 /*********************************** End Objects ***********************************/
 
@@ -85,19 +88,19 @@ void display()
 
     // Initialize camera
     cam.initialize();
-
     // Materials properties
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, materialDiff);
     glMaterialfv(GL_FRONT, GL_SPECULAR, materialSpec);
     glMaterialfv(GL_FRONT, GL_SHININESS, materialShin);
 
     // Color Properties
-    // GLfloat specref[] = {1.0f, 1.0f, 0.3f, 0.1f};
-    // glEnable(GL_COLOR_MATERIAL);
-    // glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-    // glMaterialfv(GL_FRONT, GL_SPECULAR, specref);
-    // glMateriali(GL_FRONT, GL_SHININESS, 8);
-    // glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    GLfloat specref[] = {1.0f, 1.0f, 0.3f, 0.1f};
+    glEnable(GL_COLOR_MATERIAL);
+
+    // Display robot
+    glPushMatrix();
+    body.displayRobotBody();
+    glPopMatrix();
 
     // Display surfaces
     floorSurface.display_surface();
@@ -105,19 +108,17 @@ void display()
     secondWall.display_surface();
     thirdWall.display_surface();
 
-    // Display robot
-    glPushMatrix();
-    body.displayRobotBody();
-    glPopMatrix();
-
     // Display drum object
     drumObject.drawModel();
 
+    // Display plane object
+    // plane.drawModel();
+
     // Display alcapone
-    glPushMatrix();
+    // glPushMatrix();
     glRotatef(manAngle, 0, 0, 1);
     manObject.drawModel();
-    glPopMatrix();
+    // glPopMatrix();
 
     glPopMatrix();
     glutSwapBuffers();
@@ -137,8 +138,8 @@ void kill_timer(int x)
             if (manAngle < 100)
                 manAngle += 5;
         }
-        // else if (x < 80)
-        //     manAngle -= 5;
+        else if (x < 80)
+            manAngle -= 5;
         glutPostRedisplay();
         glutTimerFunc(50, kill_timer, ++x);
     }
@@ -156,6 +157,8 @@ void intialization()
     firstWall.change_texture(mattoniBasamentoTexturePath.c_str());
     secondWall.change_texture(mattoniBasamentoTexturePath.c_str());
     thirdWall.change_texture(mattoniBasamentoTexturePath.c_str());
+
+    glEnable(GL_COLOR_MATERIAL);
 
     // Light Properties
     glEnable(GL_LIGHTING);
