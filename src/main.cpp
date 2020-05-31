@@ -32,12 +32,11 @@ std::string mattoniBasamentoTexturePath = "./Textures/Liberty-MattoniBasamento-1
 GLfloat materialShin[] = {100.0},
         materialSpec[] = {0.0, 0.0, 0.0, 1.0},
         materialDiff[] = {0.643, 0.753, 0.934, 1.0};
+
 /* Light Properties */
-GLfloat lightPosition[] = {0.5, 5.0, 0.0, 1.0},
-        lightPos[] = {0, -5.0, 0, 1.0},
-        lightSpec[] = {1.0, 1.0, 1.0, 1.0},
-        lightAmb[] = {0.0, 0.0, 0.0, 0.0},
-        lightDiff[] = {0.5, 0.5, 0.5, 1.0};
+GLfloat lightPos[] = {0, -5.0, 0, 1.0},
+        lightColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
+
 /********************************** End Properties *********************************/
 float manAngle = 0;
 bool kill = false;
@@ -81,32 +80,40 @@ void display()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glShadeModel(GL_FLAT);
-
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+
+    // Initialize camera
     cam.initialize();
-    glPushMatrix();
-    glLightfv(GL_LIGHT1, GL_POSITION, lightPos);
-    glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
-    glPopMatrix();
 
     // Materials properties
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, materialDiff);
     glMaterialfv(GL_FRONT, GL_SPECULAR, materialSpec);
     glMaterialfv(GL_FRONT, GL_SHININESS, materialShin);
-    glPushMatrix();
 
+    // Color Properties
+    // GLfloat specref[] = {1.0f, 1.0f, 0.3f, 0.1f};
+    // glEnable(GL_COLOR_MATERIAL);
+    // glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+    // glMaterialfv(GL_FRONT, GL_SPECULAR, specref);
+    // glMateriali(GL_FRONT, GL_SHININESS, 8);
+    // glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+    // Display surfaces
     floorSurface.display_surface();
     firstWall.display_surface();
     secondWall.display_surface();
     thirdWall.display_surface();
 
+    // Display robot
     glPushMatrix();
     body.displayRobotBody();
     glPopMatrix();
 
+    // Display drum object
     drumObject.drawModel();
 
+    // Display alcapone
     glPushMatrix();
     glRotatef(manAngle, 0, 0, 1);
     manObject.drawModel();
@@ -145,37 +152,24 @@ void intialization()
     glutCreateWindow("Kill al capone");
 
     // Set Textures
-    floorSurface.change_texture(metalTexturePath.c_str());
-    firstWall.change_texture(greenBronzeTexturePath.c_str());
-    secondWall.change_texture(greenBronzeTexturePath.c_str());
-    thirdWall.change_texture(greenBronzeTexturePath.c_str());
-
-    glEnable(GL_LIGHTING);
-
-    glEnable(GL_LIGHT1);
+    floorSurface.change_texture(greenBronzeTexturePath.c_str());
+    firstWall.change_texture(mattoniBasamentoTexturePath.c_str());
+    secondWall.change_texture(mattoniBasamentoTexturePath.c_str());
+    thirdWall.change_texture(mattoniBasamentoTexturePath.c_str());
 
     // Light Properties
-
-    glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiff);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpec);
-    glLightfv(GL_LIGHT1, GL_AMBIENT, lightAmb);
-    glLightfv(GL_LIGHT1, GL_DIFFUSE, lightDiff);
-    glLightfv(GL_LIGHT1, GL_SPECULAR, lightSpec);
-
-    // Material Properties
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, materialDiff);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, materialSpec);
-    glMaterialfv(GL_FRONT, GL_SHININESS, materialShin);
-    GLfloat lightColor1[] = {1.0f, 1.0f, 1.0f, 1.0f};
-    glLightfv(GL_LIGHT1, GL_DIFFUSE, lightColor1);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT1);
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, lightColor);
     glLightfv(GL_LIGHT1, GL_POSITION, lightPos);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor1);
+
+    // Properties
     glEnable(GL_NORMALIZE);
-    glShadeModel(GL_SMOOTH);
     glEnable(GL_DEPTH_TEST);
     glMatrixMode(GL_PROJECTION);
     gluPerspective(90.0, WINDOW_RATIO, 0.1, 60.0);
+
+    // Display
     glutDisplayFunc(display);
 
     // Keyboard
@@ -189,6 +183,8 @@ void intialization()
     glutAddMenuEntry("Grass", 'g');
     glutAddMenuEntry("Gray", 'r');
     glutAddMenuEntry("Metal", 'm');
+    glutAddMenuEntry("Green bronze", 'b');
+    glutAddMenuEntry("Mattoni Basamento", 'x');
     glutAddMenuEntry("------------", 0);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
@@ -208,6 +204,12 @@ void choose_floor_menu(int key)
         break;
     case 'c':
         change_floor_to(patternTexturePath);
+        break;
+    case 'b':
+        change_floor_to(greenBronzeTexturePath);
+        break;
+    case 'x':
+        change_floor_to(mattoniBasamentoTexturePath);
         break;
     default:
         break;
