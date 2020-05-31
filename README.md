@@ -13,17 +13,19 @@
 
 <p align="center">
 <br>
- <img src="./report/kill.gif" width="75%" height="75%">
+ <img src="./report/walk_kill.gif" width="75%" height="75%">
    <br>
 </p>
+
 <p align="center">
 <br>
- <img src="./report/kill3.gif" width="75%" height="75%">
+ <img src="./report/run_kill.gif" width="75%" height="75%">
    <br>
 </p>
+
 <p align="center">
 <br>
- <img src="./report/textures.gif" width="75%" height="75%">
+ <img src="./report/walk.gif" width="75%" height="75%">
    <br>
 </p>
 
@@ -67,6 +69,12 @@ There's 3 objects used in the application:
 
 The user can change between several textures using a menu opens on right click.
 
+<p align="center">
+<br>
+ <img src="./report/textures.gif" width="75%" height="75%">
+   <br>
+</p>
+
 ## Implementation details
 
 The application cosists of the following classes:
@@ -105,6 +113,34 @@ The application cosists of the following classes:
 
 ### Main function
 
+- `initalization()`— Initialize OpenGL Graphics
+
+- `display()`— Handler for window-repaint event. Called back when the window first appears and
+  whenever the window needs to be re-painted. `display()` do the following:
+
+  - Initialize camera
+
+  - Define materials properties
+
+  - Define color Properties
+
+  - Display robot
+
+  - Display surfaces
+
+  - Display drum object
+
+  - Display al capone
+
+- `keyboard_control()`— Handler for kayboard events to control body movements through keyboard keys.
+
+- `walking_timer()` — Timer for walking movement
+
+- `kill_timer()` — Timer for killing the al capone
+- `choose_floor_menu()` — Handler for texture menu
+- `change_floor_to()` — Handler for changing floor texture
+- `main()`— application runs starting from main()
+
 ## Problems faced
 
 - We faced some problems with compiling the project at first because it's a multi-class application, then we realized we should construct a header file for each class and import it instead of importing the cpp file, and we made a cmake file for compoling the project to make things more organized.
@@ -128,4 +164,4 @@ these skills are the basics of some applications such as [ZygoteBody](https://ww
 ## Acknowledgements
 
 - `ObjectaHandler` and `Surface` classes use `imageloader.cpp` and `glm.cpp` internally, `glm.cpp` and `imageloader.cpp` were provided to us in Tutorial 5 and we did not write them ourselves.
-- https://github.com/devernay/glm
+- [glm](https://github.com/devernay/glm)

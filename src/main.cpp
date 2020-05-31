@@ -115,10 +115,8 @@ void display()
     // plane.drawModel();
 
     // Display alcapone
-    // glPushMatrix();
     glRotatef(manAngle, 0, 0, 1);
     manObject.drawModel();
-    // glPopMatrix();
 
     glPopMatrix();
     glutSwapBuffers();
