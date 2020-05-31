@@ -126,20 +126,21 @@ void display()
 
 void kill_timer(int x)
 {
-    if (kill == true)
+    if (kill)
     {
-        x %= 80;
-        if (x < 20)
-            body.shoulder_up();
-        else if (x < 40)
-            body.shoulder_down();
-        else if (x < 60)
+        if (x == 80)
+            return;
+        if (x >= 40 && x < 60)
         {
             if (manAngle < 100)
                 manAngle += 5;
         }
-        else if (x < 80)
+        else if (x >= 60 && x < 80)
             manAngle -= 5;
+        else if (x < 20)
+            body.shoulder_up();
+        else if (x < 40)
+            body.shoulder_down();
         glutPostRedisplay();
         glutTimerFunc(50, kill_timer, ++x);
     }
