@@ -7,8 +7,8 @@
 #include <iostream>
 
 /************************************* Window *************************************/
-const int WINDOW_WIDTH = 1024;
-const int WINDOW_HEIGHT = 720;
+const int WINDOW_WIDTH = 2000;
+const int WINDOW_HEIGHT = 1000;
 const float WINDOW_RATIO = ((float)WINDOW_WIDTH) / WINDOW_HEIGHT;
 /*********************************** End Window ***********************************/
 
@@ -21,7 +21,10 @@ std::string gunPath = "./Objects/ACR.obj";
 std::string grayTexturePath = "./Textures/gray.bmp";
 std::string patternTexturePath = "./Textures/pattern.bmp";
 std::string metalTexturePath = "./Textures/metal.bmp";
+std::string greenBronzeTexturePath = "./Textures/Liberty-GreenBronze-1.bmp";
 std::string grassTexturePath = "./Textures/grass.bmp";
+std::string mattoniBasamentoTexturePath = "./Textures/Liberty-MattoniBasamento-1.bmp";
+
 /************************************ End Paths ***********************************/
 
 /************************************ Properties **********************************/
@@ -127,8 +130,8 @@ void kill_timer(int x)
             if (manAngle < 100)
                 manAngle += 5;
         }
-        else if (x < 80)
-            manAngle -= 5;
+        // else if (x < 80)
+        //     manAngle -= 5;
         glutPostRedisplay();
         glutTimerFunc(50, kill_timer, ++x);
     }
@@ -139,13 +142,13 @@ void intialization()
     // window intialization
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-    glutCreateWindow("GAME");
+    glutCreateWindow("Kill al camino");
 
     // Set Textures
     floorSurface.change_texture(metalTexturePath.c_str());
-    firstWall.change_texture(grayTexturePath.c_str());
-    secondWall.change_texture(grayTexturePath.c_str());
-    thirdWall.change_texture(grayTexturePath.c_str());
+    firstWall.change_texture(greenBronzeTexturePath.c_str());
+    secondWall.change_texture(greenBronzeTexturePath.c_str());
+    thirdWall.change_texture(greenBronzeTexturePath.c_str());
 
     glEnable(GL_LIGHTING);
 
