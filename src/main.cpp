@@ -142,7 +142,7 @@ void intialization()
     // window intialization
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-    glutCreateWindow("Kill al camino");
+    glutCreateWindow("Kill al capone");
 
     // Set Textures
     floorSurface.change_texture(metalTexturePath.c_str());
